@@ -1,0 +1,59 @@
+{
+  "name": "discord-server",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "egg": {
+    "declarations": true
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "egg": "^3",
+    "egg-cors": "^2.2.3",
+    "egg-jwt": "^3.1.7",
+    "egg-mysql": "^4.0.0",
+    "egg-passport": "^2.1.1",
+    "egg-passport-local": "^1.2.1",
+    "egg-scripts": "^2",
+    "egg-sequelize": "^6.0.0",
+    "egg-swagger-doc": "^2.3.2",
+    "mysql2": "^3.3.3"
+  },
+  "devDependencies": {
+    "egg-bin": "^5",
+    "egg-ci": "^2",
+    "egg-mock": "^5",
+    "encryptjs": "^2.0.0",
+    "eslint": "^8",
+    "eslint-config-egg": "^12",
+    "node-jsencrypt": "^1.0.0",
+    "sequelize-cli": "^6.6.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=egg-server-discord-server",
+    "stop": "egg-scripts stop --title=egg-server-discord-server",
+    "dev": "egg-bin dev",
+    "dev-test": "egg-bin dev --env=preview",
+    "dev-production": "egg-bin dev --env=production",
+    "debug": "egg-bin debug",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod"
+  },
+  "ci": {
+    "version": "16, 18",
+    "type": "github"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "MIT"
+}
