@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+import router from "@/routers";
 const emit = defineEmits(['change_right_side'])
 
 </script>
@@ -8,7 +8,7 @@ const emit = defineEmits(['change_right_side'])
 <template>
   <header class="head">
     <div class="home-icon">
-      <img src="@/assets/images/icn.jpg" alt="">
+      <img src="@/assets/images/brand.png" alt="">
     </div>
     <div class="links">
       <router-link to="" class="link-chat">Chat Interface</router-link>
@@ -17,7 +17,7 @@ const emit = defineEmits(['change_right_side'])
       <router-link to="" class="link-support">Support</router-link>
     </div>
     <div class="login">
-      <el-button  round size="large">Login</el-button>
+      <el-button  round size="large" @click="()=>{router.push('/login')}">Login</el-button>
     </div>
     <svg width="40" height="40" viewBox="0 0 40 40" class="svg-show" @click="emit('change_right_side')">
       <path fill="currentColor" 
@@ -44,7 +44,7 @@ const emit = defineEmits(['change_right_side'])
 .home-icon{
   margin-left: 1.4rem;
   width: 124px;
-  height: 34px;
+  height:56px;
   flex: 0 0 auto;
 }
 .home-icon img{

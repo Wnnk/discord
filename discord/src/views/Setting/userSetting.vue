@@ -75,7 +75,7 @@ const state = reactive({
   padding: 50px 6px 60px 20px;
   box-sizing: border-box;
   overflow-y: auto;
-  height: 100vh;
+  height: 100%;
   background-color: rgb(43, 45, 49);
   /* Webkit 浏览器，如 Chrome 和 Safari */
   &::-webkit-scrollbar {

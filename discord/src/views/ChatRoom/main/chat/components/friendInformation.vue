@@ -1,7 +1,29 @@
 <script setup lang='ts'>
 import friendsStatu from '@/components/friendsStatu.vue';
-import {reactive} from "vue"
+import {reactive, onMounted } from "vue"
+import type { information ,message } from '@/stores/interface/information'
+import { useRouter } from "vue-router"
+import axios from '@/axios';
+const route = useRouter()
+const method = reactive({
+  init_information() {
+     axios('/information/public',{
+      data:{ uuid: state.uuid }
+    }).then((res)=>{
+      const data = res.data.data
+      state.information = data.information
+      state.information.create_time = state.information.create_time.slice(0,10)
+      state.information.last_login_time = state.information.last_login_time?.slice(0,10)
+    })
+  },
+})
+onMounted(()=>{
+  state.uuid = route.currentRoute.value.params.id as string   //传入的不会是数组
+  method.init_information()
+})
 const state = reactive({
+  uuid:'',
+  information : {} as information,
   friend:{
     id:1,
     name:'一号朋友',
@@ -16,20 +38,21 @@ const state = reactive({
     {id:0,img:new URL('@/assets/images/icn.jpg',import.meta.url).href,name:'一号服务器'},
   ],
 })
+
 </script>
 
 <template>
   <div class="information" style="padding-right: 0;">
     <div class="pannelBanner bannerPremium" style="background-color: #1f2123;">
       <div class="head-box" >
-        <el-image :src="state.friend.avatar" class="headstyle"></el-image>
+        <el-image :src="state.information.avator_url || `src/assets/images/avatar.jpg`"  class="headstyle"></el-image>
         <el-tooltip
           effect="dark"
-          :content="state.friend.statu"
+          :content="'真的'"
           placement="top"
           style="margin-left: 10px;"
         >
-          <friendsStatu :status="state.friend.statu" class="status-"></friendsStatu>
+          <friendsStatu :status=state.information.status class="status-"></friendsStatu>
         </el-tooltip>
         <img class="background-img" :src="state.friend.background" >
       </div>
@@ -37,32 +60,22 @@ const state = reactive({
 
     <div class="right-card first-card">
       <div class="friend-name">
-        <span>{{state.friend.name}}</span>
+        <span>{{state.information.user_name}}</span>
       </div>
       <div class="line"></div>
       <h2 class="user-des">自我介绍</h2>
       <div>
-        <span class="user-text">{{state.friend.introduction}}</span>
+        <span class="user-text">{{state.information.note}}</span>
       </div>
       <div class="line"></div>
       <h2 class="user-des">用户注册时间</h2>
       <div>
-        <span class="user-text">{{state.friend.register_time}}</span>
+        <span class="user-text">{{state.information.create_time}}</span>
       </div>
       <div class="line"></div>
-      <h2 class="user-des">备注</h2>
-      <div class="note">
-        <textarea 
-          placeholder="点击添加备注"
-          aria-label="备注"
-          maxlength="256"
-          class="textarea"
-          style="height:24px"
-          :value="state.friend.note"
-          :v-model="state.remark"
-        >
-
-        </textarea>
+      <h2 class="user-des">上次登录时间</h2>
+      <div>
+        <span class="user-text">{{state.information.last_login_time}}</span>
       </div>
 
     
@@ -103,7 +116,7 @@ const state = reactive({
   background: linear-gradient(180deg,#000,#3e0a3e);
   &::-webkit-scrollbar{
     width: 8px;
-    height: 5px;
+    //height: 5px;
   }
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;

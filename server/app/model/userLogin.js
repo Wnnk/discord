@@ -8,8 +8,10 @@ module.exports = app => {
     user_email: STRING,
     user_password: STRING,
     salt: STRING,
-    status: INTEGER(20),
   });
+  UserLogin.assciate = function() {
+
+  };
 
   return UserLogin;
 };

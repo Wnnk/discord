@@ -36,4 +36,13 @@ module.exports = {
     enable: true,
     package: 'egg-jwt',
   },
+  io: {
+    enable: true,
+    package: 'egg-socket.io',
+  },
+  websocket: {
+    enable: true,
+    package: 'egg-websocket-plugin',
+  },
+
 };

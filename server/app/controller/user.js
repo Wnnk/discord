@@ -56,6 +56,20 @@ class LoginController extends Controller {
     const { ctx } = this;
     ctx.body = await this.service.user.logout();
   }
+
+  // 查询用户好友列表
+  async friend() {
+    /**
+    * @summary 查询用户好友
+    * @description 查询好友接口
+    * @router post /user/friend
+    * @Request  header string token eg：write your token at here
+    * @response 200 JsonResult 操作结果
+    */
+    const { ctx } = this;
+    ctx.body = await this.service.user.friend();
+
+  }
 }
 
 module.exports = LoginController;

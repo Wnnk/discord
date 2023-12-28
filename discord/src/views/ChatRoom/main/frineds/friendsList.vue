@@ -1,15 +1,44 @@
 <script setup lang='ts'>
-import {reactive} from "vue"
+import {reactive , onMounted} from "vue"
 import friendDisplay from "./friendDisplay.vue";
+
+import axios from "@/axios";
+import type { Friend } from '@/stores/interface/friendsList'
+
 const state = reactive({
-  statu_index:1,
-  /* friends_list:[
-    {id:0,name:"",statu:"",avatar:,},
-    {},
-    {},
-    {},
-    {},
-  ] */
+  statu_index:2,
+  friend_list:[] as Friend[], /* 保存axios接受原始数组 */
+  display_list:[] as Friend[], /* 状态数组 */
+  email_box:false,
+})
+const method = reactive({
+ check_statu(index:number) {
+  state.statu_index = index
+  if(index !== 2) {
+    if (index === 1) {
+      state.display_list = state.friend_list.filter(item => item.status === 1)
+    }else {
+      state.display_list = state.friend_list.filter(item => item.relationship === index)
+    }
+   
+  }else {
+    state.display_list = state.friend_list
+  }
+  
+ },
+ init_friendlist() {
+    axios('user/friend',{}).then((res)=>{
+      const data = res.data.data.result as Friend[];
+      data.forEach((item)=>{
+       state.friend_list.push(item)
+      })
+      state.display_list = state.friend_list
+    })
+  },
+})
+
+onMounted(()=>{
+  method.init_friendlist()
 })
 </script>
 
@@ -24,14 +53,14 @@ const state = reactive({
               好友
             </span>
             <div class="divider-q3P9HC"></div>
-            <span :class="{'is-active' : state.statu_index === 1}" @click="state.statu_index =1"> 在线 </span>
-            <span :class="{'is-active' : state.statu_index === 2}" @click="state.statu_index =2"> 全部 </span>
-            <span :class="{'is-active' : state.statu_index === 3}" @click="state.statu_index =3">
+            <span :class="{'is-active' : state.statu_index === 2}" @click="method.check_statu(2)"> 全部 </span>
+            <span :class="{'is-active' : state.statu_index === 1}" @click="method.check_statu(1)"> 在线 </span>
+            <span :class="{'is-active' : state.statu_index === 3}" @click="method.check_statu(0)">
               待定 
               <i class="msg-num"></i>
             </span>
-            <span :class="{'is-active' : state.statu_index === 4}" @click="state.statu_index =4"> 已屏蔽 </span>
-            <span :class="{'is-active' : state.statu_index === 5}" @click="state.statu_index =5"> 添加好友 </span>
+            <span :class="{'is-active' : state.statu_index === 4}" @click="method.check_statu(-1)"> 已屏蔽 </span>
+            <span :class="{'is-active' : state.statu_index === 5}"> 添加好友 </span>
           </div>
         </el-col>
         <el-col :span="5" class="header-right">
@@ -55,8 +84,9 @@ const state = reactive({
               content="收信箱"
               placement="bottom"
             >
-              <el-icon :size="24" color="rgb(181, 186, 193)"><Message /></el-icon>
+              <el-icon :size="24" color="rgb(181, 186, 193)" @click="state.email_box = !state.email_box"><Message /></el-icon>
             </el-tooltip>
+            
             <el-tooltip
               :hide-after="50"
               class="box-item"
@@ -69,6 +99,16 @@ const state = reactive({
           </div>
         </el-col>
       </el-row>
+
+      <div class="email-box" v-if="state.email_box">
+        <div class="email-box-header">
+          <el-icon :size="24" color="rgb(181, 186, 193)"><Message /></el-icon>
+          <h1>收件箱</h1>
+        </div>
+        <div class="email-box-contain">
+            <el-empty description="你已搞定一切" :image-size="100" />
+        </div>
+      </div>
     </el-header>
     <!-- 朋友列表信息 -->
     <el-row class="box-main-mid-right">
@@ -76,7 +116,7 @@ const state = reactive({
         <el-container>
           <el-main class="friends-status">
               <el-row class="friends-item-list">
-                <friendDisplay/>
+                <friendDisplay :friend_list ="state.display_list"/>
               </el-row>
           </el-main>
         </el-container>
@@ -103,9 +143,7 @@ const state = reactive({
   height: 48px;
   
 }
-.header-left{
-  
-}
+
 
 .frineds-title{
   color:rgb(242, 243, 245);
@@ -141,6 +179,7 @@ const state = reactive({
         background-color: #248046;
         border-radius: 3px;
         color: #fffff3;
+        cursor: pointer;
       }
     }
     
@@ -228,6 +267,39 @@ const state = reactive({
     font-size: 16px;
     text-align: center;
   }
+}
+
+
+/* 收件箱 */
+.email-box{
+  width: 35vw;
+  max-width: 600px;
+  min-width: 480px;
+  max-height: 80vh;
+  position: absolute;
+  top: 50px;
+  right: 100px;
+  z-index: 30;
+}
+.email-box-header{
+  display: flex;
+  align-items: center;
+  background-color: #1E1F22;
+  border-radius: 10px 10px 0 0;
+  h1{
+    margin-left: 8px;
+    color: #DBDEE1;
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 600;
+    flex-grow: 1;
+  }
+}
+.email-box-contain{
+  min-width: 480px;
+  height: 400px;
+  border-radius: 0 0 10px 10px;
+  background-color: #303133;
 }
 
 

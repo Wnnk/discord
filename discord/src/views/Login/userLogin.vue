@@ -4,8 +4,9 @@ import {reactive } from "vue"
 import { encrypt } from "@/encrypt"
 import { ElMessage }  from 'element-plus'
 import axios from "@/axios"
+import { globalStore } from '@/stores/index'
 
-
+const store_data = globalStore()
 const state = reactive({
   form:{
     user_email:"1275056222@qq.com",
@@ -26,12 +27,15 @@ const method = reactive({
     axios('/user/login',{
       data:{rsaParams:str}
     }).then((res)=>{
-      console.log(res)
       if (res.data.code === '0') {
         ElMessage({
           message:'登陆成功',
           type: 'success'
         })
+        store_data.user_info = res.data.data.result
+        store_data.token = res.data.data.token
+        sessionStorage.setItem('token',store_data.token)
+        router.push('/main/private')
       }else {
         ElMessage({
           message: `${res.data.msg}`,

@@ -1,15 +1,40 @@
 <script setup lang='ts'>
 import   UserInfo  from '@/views/ChatRoom/channelSide/components/userInfo.vue';
-import  {reactive} from 'vue'
+import  {reactive , onMounted} from 'vue'
+import axios from "@/axios";
+import type { Friend } from '@/stores/interface/friendsList'
+import router from '@/routers';
+
 const state =  reactive({
   search_box:false,
   search_key:null,
   search_res:[{name:"结果1"},{name:"结果2"}],/* 虚拟列表 */
-  private_message_list:[                    /* 虚拟列表 */
-    {id:0,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href,name:"1号"},
-    {id:1,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href,name:"2号"},
-    {id:3,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href,name:"3号"}
-  ]
+  friend_list:[] as Friend[]
+})
+const method = reactive({
+  init_friendlist() {
+    axios('user/friend',{}).then((res)=>{
+      const data = res.data.data.result as Friend[];
+      state.friend_list = data
+    })
+  },
+  /* 处理TS对avator_url为空报错 */
+  get_avatar_url(item:any) {
+    return item.avator_url || new URL('@/assets/images/avatar.jpg',import.meta.url).href
+  },
+  chat_main(uuid:string) {
+    router.push({
+      path:`/main/${ uuid }`,
+      name:'chat',
+      params:{
+        id:uuid
+      }
+    })
+  }  
+})
+
+onMounted(()=>{
+  method.init_friendlist()
 })
 </script>
 
@@ -51,17 +76,18 @@ const state =  reactive({
             >
               <el-col :span="12">
                 <el-icon ><UserFilled /></el-icon>
-                <span>好友</span>
+                <span class="category">好友</span>
                 <i class="msg-num">3</i>
               </el-col>
             </el-row>
 
             <el-row
               :class="['friends-top-flex',$route.path === '/main/store' ? 'is-active' : '']"
+              @click="router.push('/luckysheet')"
             >
               <el-col :span="12">
                 <el-icon ><MessageBox /></el-icon>
-                <span>Box</span>
+                <span class="category">在线文档</span>
               </el-col>
             </el-row>
           </el-container>
@@ -85,16 +111,16 @@ const state =  reactive({
             <!-- 私信列表 -->
             <el-row
               class=" friends-top-flex friends-list"
-              v-for="item in state.private_message_list" :key=item.id
+              v-for="item in state.friend_list" :key=item.uuid
 
             >
               <div class="private-message-user-box" >
-                <div class="private-message-user-box-flex">
+                <div class="private-message-user-box-flex" @click="method.chat_main(item.uuid)">
                   <div class="private-message-user-box-left">
-                    <el-avatar :src="item.avatar"></el-avatar>
+                    <el-avatar :src="method.get_avatar_url(item)"></el-avatar>
                   </div>
                   <div class="private-message-user-box-flex-right">
-                    <span class="private-message-user-box-right-name">{{item.name}}</span>
+                    <span class="private-message-user-box-right-name">{{item.user_name}}</span>
                   </div>
                 </div>
               </div>
@@ -102,7 +128,7 @@ const state =  reactive({
           </el-container>
         </el-header>
 
-        <!-- 底部选中对象资料 -->
+        <!-- 底部操作 -->
         <el-footer>
           <el-row class="bottom-profile">
             <UserInfo/>
@@ -114,6 +140,9 @@ const state =  reactive({
 </template>
 
 <style lang='scss' scoped>
+.el-container{
+  height: 100%;
+}
 .box-header{
   display: flex;
   justify-content: center;
@@ -143,6 +172,8 @@ const state =  reactive({
   height: 2em;
 }
 .box-main{
+overflow-y: hidden;
+  
   .box-main-container{
     display: flex;
     justify-content: space-between;
@@ -158,6 +189,7 @@ const state =  reactive({
     top: 0;
     background-color: #2B2D31;
     z-index: 99;
+    height: 95px;
   }
   .friends-top-flex{
     height: 40px;
@@ -180,10 +212,21 @@ const state =  reactive({
     background-color: #313338;
     padding: unset;
     width: 100%;
-    /* height: 95px; */
+    // height: 95px;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    &::-webkit-scrollbar {
+    width: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #3f4147;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #313338;
+      border-radius: 4px;
+    }
 
     .friends-list {
       &:last-child {
@@ -200,7 +243,10 @@ const state =  reactive({
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 3px 0;
+    margin: 0.3rem 0;
+    .category{
+      flex-grow: 1;
+    }
     &:hover{
       background-color: #35373c;
       background-color: 5px;
@@ -303,7 +349,7 @@ const state =  reactive({
   position: fixed;
   bottom: 0;
   width: 14.8%;
-  background-color: #232428;
+  // background-color: #232428;
   height: 52px;
   padding: 0 6px;
   z-index: 99;

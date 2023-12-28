@@ -2,12 +2,22 @@
 import topNav from './components/topNav/topNav.vue'
 import rightSide from "./components/rightSide/rightSide.vue"
 import { reactive } from 'vue';
+import { globalStore } from '@/stores';
+import router from '@/routers';
+  const store = globalStore()
   const state = reactive({
-    right_side_show:true   //侧边栏状态
+    right_side_show:false   //侧边栏状态
   })
   const method = reactive({
     change_right_side(){
       state.right_side_show = !state.right_side_show 
+    },
+    open_app() {
+      if (store.token && store.user_info) {
+        router.push('/main/private')
+      }else {
+        router.push('/login')
+      }
     }
   })
 </script>
@@ -38,7 +48,7 @@ import { reactive } from 'vue';
         </div>
         <div class="contatiner-body">
           <button class="button-download button-style">Windows版下载</button>
-          <button class="button-open button-style">在您的浏览器中打开 cord</button>
+          <button class="button-open button-style" @click="method.open_app">在您的浏览器中打开 cord</button>
         </div>
       </div>
     </div>
@@ -63,7 +73,8 @@ import { reactive } from 'vue';
 .main{
   background: #404eed;
   position: relative;
-  min-height: 626px;
+  // min-height: 626px;
+  height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction:  column;
@@ -160,17 +171,17 @@ import { reactive } from 'vue';
   transform: translateX(100%);
 }
 
-@media screen and (min-width:768px)
-{
-  .main{
-    padding-bottom: 56px;
-    padding-bottom: var(--section-spacing);
-    min-height: 626px;
-  }
+// @media screen and (min-width:768px)
+// {
+//   .main{
+//     padding-bottom: 56px;
+//     padding-bottom: var(--section-spacing);
+//     min-height: 626px;
+//   }
 
-}
+// }
 
-@media screen and (max-width: 768px) {
+// @media screen and (max-width: 768px) {
   
-}
+// }
 </style>

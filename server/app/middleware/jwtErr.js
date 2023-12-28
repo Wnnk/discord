@@ -4,13 +4,15 @@ module.exports = options => {
     if (token) {
       try {
         // 解码token
-        let decode = ctx.app.jwt.verify(token, options.secret);
+        const decode = ctx.app.jwt.verify(token, options.secret);
+        console.log('解码后', decode);
         await next();
       } catch (error) {
         ctx.status = 401;
         ctx.body = {
           massage: 'token已过期,请重新登录',
           code: -1,
+          error: `${error}`,
         };
         return;
       }

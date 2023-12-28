@@ -1,35 +1,23 @@
 <script setup lang='ts'>
 const props = defineProps({
   status:{
-    type:String,
-    default:"online"
+    type:Number,
+    default:1
   },
-  status_text:{
-    type:String,
-    default:''
-  }
+
 })
 </script>
 
 <template>
   <div class="friend-status">
-    <div
-      v-if="!props.status_text"
-      :class="[
-        status === 'online' ? 'status-online' 
-        : status === 'idle' ? 'status-idle' 
-        :status === 'offline' ? 'status-offline' 
-        : 'status-busy',
-      ]"
-    >
-    </div>
+
     <!-- 在线 -->
     <el-tooltip
       :hide-after="50"
       :enterable="false"
-      v-else-if="status === 'online'"
+      v-if="status === 1"
       effect="dark"
-      :content="props.status_text"
+      content="在线"
       placement="top"
     >
     <div class="status-online"></div>
@@ -38,9 +26,9 @@ const props = defineProps({
     <el-tooltip
       :hide-after="50"
       :enterable="false"
-      v-else-if="status === 'idle'"
+      v-else-if="status === 2"
       effect="dark"
-      :content="props.status_text"
+      content="空闲"
       placement="top"
     >
     <div class="status-idle"></div>
@@ -49,9 +37,9 @@ const props = defineProps({
     <el-tooltip
       :hide-after="50"
       :enterable="false"
-      v-else-if="status === 'offline'"
+      v-else-if="status === 0"
       effect="dark"
-      :content="props.status_text"
+      content="离线"
       placement="top"
     >
     <div class="status-offline"></div>
@@ -60,9 +48,9 @@ const props = defineProps({
     <el-tooltip
       :hide-after="50"
       :enterable="false"
-      v-else-if="status === 'busy'"
+      v-else-if="status === 3 "
       effect="dark"
-      :content="props.status_text"
+      content="忙碌"
       placement="top"
     >
     <div class="status-busy"></div>

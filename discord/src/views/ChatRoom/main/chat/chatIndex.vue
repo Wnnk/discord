@@ -3,7 +3,13 @@ import headLeft from "./components/headLeft.vue"
 import headRight from "./components/headRight.vue"
 import chatMain from "./components/chatMain.vue"
 import friendInformation from "./components/friendInformation.vue"
+
+
+
 </script>
+
+
+
 
 <template>
   <div>
@@ -11,7 +17,7 @@ import friendInformation from "./components/friendInformation.vue"
       <el-header class="header">
         <el-row>
           <el-col :span="15" class="header-left">
-            <headLeft />
+            <headLeft  />
           </el-col>
           <el-col :span="8" class="header-right">
             <headRight />
@@ -26,7 +32,7 @@ import friendInformation from "./components/friendInformation.vue"
         </el-col>
         <el-col :span="7" class="box-right">
           <el-container>
-            <friendInformation/>
+            <friendInformation />
           </el-container>
         </el-col>
       </el-row>
@@ -43,7 +49,7 @@ import friendInformation from "./components/friendInformation.vue"
 }
 .chat-main{
   position: relative;
-  height: 100vh;
+  //height: 100%;
   padding: unset;
   background-color: #313338;
   

@@ -8,23 +8,33 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "connect-multiparty": "^2.2.0",
     "egg": "^3",
     "egg-cors": "^2.2.3",
     "egg-jwt": "^3.1.7",
+    "egg-multipart": "^3.3.0",
     "egg-mysql": "^4.0.0",
     "egg-passport": "^2.1.1",
     "egg-passport-local": "^1.2.1",
-    "egg-scripts": "^2",
+    "egg-scripts": "^2.17.0",
     "egg-sequelize": "^6.0.0",
+    "egg-socket.io": "^4.1.6",
+    "egg-static": "^2.3.1",
     "egg-swagger-doc": "^2.3.2",
-    "mysql2": "^3.3.3"
+    "egg-websocket": "^0.0.1",
+    "egg-websocket-plugin": "^3.0.0-beta.0",
+    "moment": "^2.29.4",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.3.3",
+    "pako": "^2.1.0",
+    "vue-virtual-scroll-list": "^2.3.5",
+    "vue-virtual-scroller": "^2.0.0-beta.8"
   },
   "devDependencies": {
     "egg-bin": "^5",
     "egg-ci": "^2",
     "egg-mock": "^5",
     "encryptjs": "^2.0.0",
-    "eslint": "^8",
     "eslint-config-egg": "^12",
     "node-jsencrypt": "^1.0.0",
     "sequelize-cli": "^6.6.1"
@@ -33,9 +43,9 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-discord-server",
+    "start": "egg-scripts start --daemon --title=egg-server-discord-server --sticky",
     "stop": "egg-scripts stop --title=egg-server-discord-server",
-    "dev": "egg-bin dev",
+    "dev": "egg-bin dev --sticky",
     "dev-test": "egg-bin dev --env=preview",
     "dev-production": "egg-bin dev --env=production",
     "debug": "egg-bin debug",

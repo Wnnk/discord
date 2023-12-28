@@ -4,11 +4,9 @@ import router from '@/routers'
 * 请求拦截器
 */
 axios.interceptors.request.use((config) => {
-  // 预处理请求信息
-  console.log('RequestMessage:',config,sessionStorage.getItem('token'))
   return config
 }, (error) => {
-  // 预处理请求异常时抛出error
+ 
   return Promise.reject(error)
 })
 
@@ -16,18 +14,17 @@ axios.interceptors.request.use((config) => {
 * 响应拦截器
 */
 axios.interceptors.response.use((res) => {
-  // 进行响应事件处理
+ 
   const status = (res.status)
   switch (status) {
-    case 200 :return res;
-    default:return Promise.reject({ code: status, msg: res.data.data.message });
+    case 200 : return res;
+    // default:return Promise.reject({ code: status, msg: res.data.data.message });
   }
 }, (error) => {
   const status = (error.toString().substring(error.toString().length-3,error.toString().length))
   switch(status){
     case '404':
      console.error('request地址不存在~')
-     //router.push({path:'/error',query:{status:404}})
     break;
     case '401':
      console.error('用户校验失败，请重新登录~')
@@ -35,7 +32,6 @@ axios.interceptors.response.use((res) => {
     break;
     case '500':
      console.error('服务器内部错误~')
-     //router.push({path:'/error',query:{status:500}})
     break;
   }
   return Promise.reject(error)
@@ -51,6 +47,8 @@ axios.interceptors.response.use((res) => {
  * @param dataType
  * @returns {AxiosPromise}
  */
+
+
 export default function (url:string, {
   // 默认求情方式post
   method = 'post',
@@ -60,9 +58,9 @@ export default function (url:string, {
   data = {},
   // 请求头
   headers = {
-    /* 'Content-Type':"text/plain; charset=utf-8", */
+    'Content-Type':'application/json',
     'authorization':sessionStorage.getItem('token'),
-    'token':sessionStorage.getItem('token')
+    'token':sessionStorage.getItem('token'),
     },
   // 文件类型
   dataType = 'json'

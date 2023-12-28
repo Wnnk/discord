@@ -59,7 +59,7 @@ const state =  reactive({
 .account{
   position: relative;
   background-color: rgb(57, 58, 58);
-  height: 100vh;
+  height: 100%;
   padding: 60px 40px 40px 80px;
   overflow-y: auto;
   &::-webkit-scrollbar {

@@ -1,5 +1,12 @@
 <script setup lang='ts'>
 import leftSide from "./aside/leftSide.vue"
+import { globalStore } from '@/stores/index'
+import {useRoute} from 'vue-router'
+
+const route = useRoute()
+
+const store_data = globalStore()
+
 
 
 </script>
@@ -8,16 +15,21 @@ import leftSide from "./aside/leftSide.vue"
   <div class="chatroom">
     <el-container>
       <el-aside width="72px">
-        <leftSide></leftSide>
+        <leftSide :key="route.path"></leftSide>
       </el-aside>
 
       <el-row class="box-right">
         <el-col :span="4"  class="channel-side" >
-          <router-view name="channelSide" />
+            <router-view name="channelSide">
+              
+            </router-view>
         </el-col >
         
         <el-col :span='20'  class="right-main">
-          <router-view name="mainChannel"></router-view>
+            <router-view name="mainChannel" >
+
+            </router-view>
+          
         </el-col>
       </el-row>
     </el-container>
@@ -33,7 +45,7 @@ import leftSide from "./aside/leftSide.vue"
 
 
 .chatroom{
-  height: 100%;
+ height: 100%;
   
   background-color: #313338;
   .box-right{

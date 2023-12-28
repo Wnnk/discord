@@ -7,6 +7,10 @@ import type { RouteRecordRaw } from 'vue-router';
 
 export const staticRouter:Array<RouteRecordRaw> = [
   {
+    path:'/:catchAll(.*)',
+    component: () => import("@/views/404/notFound.vue")
+  },
+  {
     path:"/",
     component:() => import("@/views/Home/homePage.vue")
   },
@@ -45,15 +49,36 @@ export const staticRouter:Array<RouteRecordRaw> = [
           mainChannel:()=>import('@/views/ChatRoom/main/frineds/friendsList.vue')
         }
       },
-      {     /*聊天界面  */
-        path:'/main/:id',
-        name:'chat',
-        components:{
-          channelSide:()=>import('@/views/ChatRoom/channelSide/index.vue'),
-          mainChannel:()=>import('@/views/ChatRoom/main/chat/chatIndex.vue'),
-        }
-      }
     ]
   },
-  
+  {     /*聊天界面  */
+  path:'/chat/:id',
+  name:'chat',
+  component:()=>import('@/views/ChatRoom/main/chat/index.vue'),
+  },
+  /* 社区聊天 */
+  {
+    path:'/guild/:guildId/:channelId',
+    name:'guildchat',
+    component:()=>import('@/views/Guild/GuildChat/index.vue'),
+  },
+  {
+    /* 搜索社区 */
+    path:'/guild-discovery',
+    name:'guild',
+    component:()=>import('@/views/Guild/GuildDiscovery/index.vue'),
+  },
+  {
+    /* 表格列表页 */
+    path:'/luckysheet',
+    name:'luckeysheet',
+    component:() => import('@/views/LuckeySheet/index.vue'),
+  },
+  {
+    /* 多人协作表格 */
+    path:'/luckysheet/:Id',
+    name:'sheet',
+    component:()=> import('@/views/LuckeySheet/SheetMain.vue'),
+  }
+
 ]

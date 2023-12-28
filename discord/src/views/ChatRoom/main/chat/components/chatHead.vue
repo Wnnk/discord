@@ -1,7 +1,23 @@
 <script setup lang='ts'>
 import {reactive} from "vue"
+import type { information } from "@/stores/interface/information";
+import axios from "@/axios";
 const state = reactive({
   service:1
+})
+const props = defineProps<{
+  information:information
+}>()
+
+const method = reactive({
+  relationship(relationship:number) {
+    axios('/information/relationship',{
+      data:{
+        relationship,
+        friend_uuid: props.information.uuid
+      }
+    })
+  }
 })
 </script>
 
@@ -9,10 +25,10 @@ const state = reactive({
   <div class="chat-head">
     <div class="chat-top">
       <div class="chat-avatar">
-        <el-avatar :size="80"></el-avatar>
+        <el-avatar :size="80" :src="props.information.avator_url"></el-avatar>
       </div>
       <div class="chat-name">
-        <span>chat对象的名字</span>
+        <span>{{props.information.user_name}}</span>
       </div>
     </div>
 
@@ -22,8 +38,8 @@ const state = reactive({
       <span v-else>{{state.service}}个共同服务器频道</span>
       </div>
     <div class="chat-edit">
-      <el-button size="small" class="chat-operate">删除好友</el-button>
-      <el-button size="small" class="chat-operate">屏蔽好友</el-button>
+      <el-button size="small" class="chat-operate" @click="method.relationship(0)">删除好友</el-button>
+      <el-button size="small" class="chat-operate" @click="method.relationship(-1)">屏蔽好友</el-button>
     </div>
   </div>
 

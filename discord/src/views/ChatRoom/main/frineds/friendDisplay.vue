@@ -1,23 +1,36 @@
 <script setup lang='ts'>
-import {reactive} from "vue"
+import {reactive } from "vue"
 import  {ZoomIn} from "@element-plus/icons-vue"
+import router from "@/routers";
+import type { Friend } from '@/stores/interface/friendsList'
+import FriendsStatu from '@/components/friendsStatu.vue'
+
+let props = defineProps<{
+  friend_list: Friend[] 
+}>()
+
 const state = reactive({
-  list:[
-    {id:0,name:"一号好友",statu:0,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:1,name:"二号好友",statu:1,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:2,name:"三号好友",statu:2,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:3,name:"四号好友",statu:2,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:4,name:"五号好友",statu:1,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:5,name:"六号好友",statu:0,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:6,name:"七号好友",statu:0,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:7,name:"八号好友",statu:1,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:8,name:"九号好友",statu:2,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:9,name:"十号好友",statu:0,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:10,name:"十一号好友",statu:0,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-    {id:11,name:"十二号好友",statu:0,avatar:new URL('@/assets/images/icn.jpg',import.meta.url).href},
-  ],
   search_key:'',
 })
+
+const method = reactive({
+  chat_main(uuid:string) {
+    router.push({
+      path:`/main/${ uuid }`,
+      name:'chat',
+      params:{
+        id:uuid
+      }
+    })
+  },
+ 
+  /* 处理TS对avator_url为空报错 */
+  get_avatar_url(item:any) {
+    return item.avator_url || new URL('@/assets/images/avatar.jpg',import.meta.url).href
+  }
+})
+
+
 </script>
 
 <template>
@@ -33,24 +46,29 @@ const state = reactive({
     </div>
 
     <div class="placeholder"></div>
+      <div class="empty" v-if="props.friend_list.length === 0">
+        <el-empty></el-empty>
+      </div>
       <div
         class="friends-list"
-        v-for="item in state.list"
+        v-if="props.friend_list.length > 0"
+        v-for="item in props.friend_list"
       >
         <div class="friends-avatar">
-          <el-avatar :src="item.avatar" ></el-avatar>
+          <el-avatar :src="method.get_avatar_url(item)" class="avatar"></el-avatar>
+          <FriendsStatu :status="item.status" class="statu"/>
         </div>
         <div class="friends-info">
           <div class="friends-name">
-            {{item.name}}
+            {{item.user_name}}
           </div>
-          <div class="friends-status" v-if="item.statu === 0">
+          <div class="friends-status" v-if="item.status === 1">
             在线
           </div>
-          <div class="friends-status" v-if="item.statu === 1">
+          <div class="friends-status" v-if="item.status === 3">
             忙碌
           </div>
-          <div class="friends-status" v-if="item.statu === 2">
+          <div class="friends-status" v-if="item.status === 0">
             离线
           </div>
         </div>
@@ -63,7 +81,7 @@ const state = reactive({
               placement="top"
               content="信息"
             >
-            <el-icon :size="36" color="rgb(181, 186, 193)"><ChatDotSquare /></el-icon>
+            <el-icon :size="36" color="rgb(181, 186, 193)" @click="method.chat_main(item.uuid)"><ChatDotSquare /></el-icon>
             </el-tooltip>
                    
             <el-tooltip
@@ -153,16 +171,26 @@ const state = reactive({
   height: 35px;
   width: 390px;
   position: relative;
-  .friends-avatar{
-    width: 35px;
-    height: 35px;
-  }
   .friends-name{
     display: flex;
     justify-content: flex-start;
     font-size: 14px;
     font-weight: bold;
     color: #f2f3f5;
+  }
+ 
+ 
+
+}
+.friends-avatar{
+  position: relative;
+  width: 35px;
+  height: 35px;
+  .statu{
+    position: absolute;
+    right: -8px;
+    bottom: -5px;
+    z-index: 100;
   }
 }
 

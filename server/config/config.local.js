@@ -43,7 +43,7 @@ module.exports = () => {
     // 数据库名
     database: 'EggZoneFrame',
     // 时区，sequelize有很多自动时间的方法，都是和时区相关的，记得设置成东8区（+08:00）
-    timezone: '+08:00',
+    // timezone: '+08:00',
     define: {
       /* timestamps默认值是true，如实是true会自动添加上 create_time 和update_time两个字段 */
       timestamps: false,

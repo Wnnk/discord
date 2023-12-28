@@ -84,7 +84,7 @@ const method = reactive({
           <el-form-item
             label="密码"
           >
-            <span  class="is-vaild" v-show="state.is_vdild_password === false">密码格式</span>
+            <span  class="is-vaild" v-show="state.is_vdild_password === false">密码长度大于7且开头为字母</span>
             <el-input type="password" v-model="state.form.user_password" @blur="method.is_password(state.form.user_password)">
             </el-input>
           </el-form-item>

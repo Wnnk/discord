@@ -14,6 +14,8 @@ module.exports = {
       login_num: INTEGER(10),
       create_time: DATE,
       last_login_time: DATE,
+      note: STRING,
+      status: INTEGER(20),
 
     });
   },

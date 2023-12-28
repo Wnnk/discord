@@ -18,4 +18,15 @@ module.exports = {
     const user_name = '花名' + num.substring(0, 6);
     return user_name;
   },
+  // 随机字符串生成
+  strSet(len = 32) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < len; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters.charAt(randomIndex);
+    }
+    console.log(result);
+    return result;
+  },
 };
