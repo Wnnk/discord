@@ -43,7 +43,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-discord-server --sticky",
+    "start": "egg-scripts start --daemon --port=7001 --title=egg-server-discord-server --sticky",
     "stop": "egg-scripts stop --title=egg-server-discord-server",
     "dev": "egg-bin dev --sticky",
     "dev-test": "egg-bin dev --env=preview",

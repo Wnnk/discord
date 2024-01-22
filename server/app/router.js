@@ -21,6 +21,8 @@ module.exports = app => {
   router.post('/user/logout', controller.user.logout);
   // friend_list
   router.post('/user/friend', jwtErr, controller.user.friend);
+  // 好友搜索
+  router.post('/user/search', jwtErr, controller.user.search);
   // 聊天界面的基本信息
   router.post('/information/public', jwtErr, controller.information.public);
   // 改变好友关系

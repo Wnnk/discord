@@ -8,7 +8,7 @@ import http from 'axios'
 import { useRouter } from "vue-router"
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
-
+import Emoji from '@/common/emoji/emoji.vue'
 
 
 const route = useRouter()
@@ -21,7 +21,7 @@ const init =  () => {
   state.uuid = route.currentRoute.value.params.id as string   //传入的不会是数组
   method.init_information()
   socket.value = io('http://127.0.0.1:7001/chat',{
-    query:{},
+    transports: ['polling'],
   })
   socket.value.on('connect', () => {
   socket.value.emit('join',{
@@ -49,7 +49,9 @@ const state = reactive({
   microphone_color:'white',                                             // 录音提示
   aduio_icon:new URL('@/assets/images/audio.png',import.meta.url).href,  // 录音icon
   roomID:'',
+  emoji_box:false,                                                       // 表情框显示隐藏
 })
+
 
 watch(()=>  route.currentRoute.value.params.id,()=>{
   init()
@@ -157,6 +159,31 @@ const method = reactive({
 })
 
 
+const send_box = ref<HTMLInputElement | null >(null)
+/* 聊天框插入位置选择 */
+const cursor = ref(0);
+const visible = ref(false)
+
+
+
+/* 选择表情后在输入框展示 */
+const emojiHandle = (item:string) => {
+  /* 获取光标位置 */
+  cursor.value = send_box.value?.selectionStart as number;
+  const msg = state.send_value
+  console.log(cursor.value)
+  if (!cursor.value) {
+    /* 末尾插入 */
+    state.send_value += item
+  } else {
+    /* 中间插入 */
+    state.send_value = msg.slice(0, cursor.value) + item + msg.slice(cursor.value)
+    console.log(state.send_value)
+  }
+} 
+
+
+
 </script>
 
 <template>
@@ -247,8 +274,12 @@ const method = reactive({
         :placeholder="`消息@${state.information.user_name}`"
         v-model="state.send_value"
         @keyup.enter="method.send_message(0)"
+        ref="send_box"
+        
       />
+
       <div class="chat-icon-box">
+        
         <el-tooltip
         :hide-after="0"
         effect="dark"
@@ -256,7 +287,10 @@ const method = reactive({
         placement="top"
         :enterable="false"
         >
-          <el-icon class="send-audio" :size="20" color="rgb(255,255,255)" ><PictureRounded /></el-icon>
+          <el-icon class="icon" :size="20" color="rgb(255,255,255)" @click="()=>{state.emoji_box = !state.emoji_box}">
+            <PictureRounded />
+            <Emoji v-show="state.emoji_box" @emojiHandle = 'emojiHandle' :all="true" />
+          </el-icon>
         </el-tooltip>
         <el-tooltip
         :hide-after="0"
@@ -287,6 +321,8 @@ const method = reactive({
 <style lang='scss' scoped>
 .main-box{
  height: 100vh;
+ width: 100%;
+ position: relative;
  overflow-y: auto;
   &::-webkit-scrollbar {
     width: 5px;
@@ -384,6 +420,7 @@ const method = reactive({
 }
 /* 发送消息框 */
 .chat-search-box{
+  width: 50%;
   position: fixed;
   bottom: 20px;
   display: flex;
@@ -394,7 +431,7 @@ const method = reactive({
   background-color: #3f4147;
   border-bottom: 1.5px solid #3f4147;
   border-radius: 5px;
-  width: 95%;
+  // min-width: 800px;
   input{
     width: 80%;
     word-break: break-all;
@@ -412,7 +449,9 @@ const method = reactive({
   .chat-icon-box{
     display: flex;
     // align-items: center;
- 
+    .icon{
+      position: relative;
+    }
   }
  
 

@@ -70,6 +70,15 @@ class LoginController extends Controller {
     ctx.body = await this.service.user.friend();
 
   }
+  /**
+   * @description 好友模糊搜索
+   * @router post /user/search
+   * 
+   */
+  async search() {
+    const { ctx } = this;
+    ctx.body = await this.service.user.search();
+  }
 }
 
 module.exports = LoginController;

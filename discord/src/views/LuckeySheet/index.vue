@@ -33,7 +33,7 @@ const route = useRoute()
 
 
 .room{
- height: 100%;
+ min-height: 100vh;
   
   background-color: #313338;
   .box-right{

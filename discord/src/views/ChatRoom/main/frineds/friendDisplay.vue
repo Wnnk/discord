@@ -1,17 +1,13 @@
 <script setup lang='ts'>
 import {reactive } from "vue"
-import  {ZoomIn} from "@element-plus/icons-vue"
 import router from "@/routers";
 import type { Friend } from '@/stores/interface/friendsList'
 import FriendsStatu from '@/components/friendsStatu.vue'
-
+import searchFriend from "./searchFriend.vue";
 let props = defineProps<{
   friend_list: Friend[] 
 }>()
 
-const state = reactive({
-  search_key:'',
-})
 
 const method = reactive({
   chat_main(uuid:string) {
@@ -35,16 +31,8 @@ const method = reactive({
 
 <template>
   <div class="friend-search" style="width: 770px;">
-    <div class="search-box">
-      <el-input
-        class="search-input"
-        v-model="state.search_key"
-        placeholder="搜索好友"
-        :suffix-icon="ZoomIn"
-      >
-      </el-input>
-    </div>
 
+    <searchFriend />
     <div class="placeholder"></div>
       <div class="empty" v-if="props.friend_list.length === 0">
         <el-empty></el-empty>
@@ -115,30 +103,7 @@ const method = reactive({
   height: 45px;
   width: 100%;
 }
-.search-box{
-  background-color: #313338;
-  .search-input{
-  width: 100%;
-  height: 35px;
-  border-radius: 3px;
-  font-size: 14px;
-  color: #333;
-  background-color: #1e1f22;
-  outline: none;
-  .is-focus{
-    box-shadow: unset;
-  }
 
-  &::placeholder{
-    color: #999;
-    font-size: 20px;
-  }
-}
-}
-:deep(.el-input__wrapper) {
-    background-color: #1e1f22;
-    box-shadow: unset;
-}
 
 /* 好友列表 */
 .friends-list{
@@ -190,7 +155,7 @@ const method = reactive({
     position: absolute;
     right: -8px;
     bottom: -5px;
-    z-index: 100;
+    z-index: 10;
   }
 }
 

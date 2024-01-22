@@ -4,8 +4,8 @@ import { useRoute } from "vue-router"
 import axios from '@/axios'
 import guildOnline from './component/guildOnline.vue'
 import type { GuildChatList, MemberInfo, Channel } from './interface'
-import io from 'socket.io-client';
-import { Socket } from 'socket.io-client';
+import  io from 'socket.io-client';
+import type { Socket } from 'socket.io-client';
 
 import Emoji from '@/common/emoji/emoji.vue'
 
@@ -26,8 +26,8 @@ const init = ()=>{
   method.channel_title(channel_id) // 频道信息
 
   /* socket 连接 */
-  socket.value = io('ws://127.0.0.1:7001/guildChat',{
-    query:{},
+  socket.value = io('http://127.0.0.1:7001/guildChat',{
+    transports: ['polling'],
   })
   socket.value.on('connect',()=>{
     socket.value.emit('joinChannel',{
@@ -42,10 +42,10 @@ const init = ()=>{
 }
 
 const disconnetSocket = () => {
-  socket.value?.emit('leaveChannel',{
+  socket.value.emit('leaveChannel',{
     channel_id:state.base_data.channel_id,
   })
-  console.log('发送')
+  
 }
 
 onMounted(init)
@@ -71,7 +71,8 @@ const state = reactive({
     group_id:-1,
     message_type:1,
     channel_id:''
-  }
+  },
+  emoji_box:false,
 })
 const method = reactive({
   
@@ -83,6 +84,7 @@ const method = reactive({
     }).then((res)=>{
       const data = res.data.msg.result
       state.origin_chat_list = data
+      
     })
   },
   /* 同一天只显示一次 */
@@ -143,6 +145,22 @@ const method = reactive({
 
 
 })
+const send_box = ref<HTMLInputElement | null >(null)
+/* 聊天框插入位置选择 */
+const cursor = ref(0);
+/* 选择表情后在输入框展示 */
+const emojiHandle = (item:string) => {
+  cursor.value = send_box.value?.selectionStart as number;
+  const msg = state.send_value
+  if (!cursor.value) {
+    /* 末尾插入 */
+    state.send_value += item
+  } else {
+    /* 中间插入 */
+    state.send_value = msg.slice(0, cursor.value) + item + msg.slice(cursor.value)
+  }
+} 
+
 </script>
 
 <template>
@@ -198,11 +216,14 @@ const method = reactive({
 
           <!-- 用户输入框 -->
           <div class="user-inner">
-                <div class="emoji">
-                  <Emoji />
-                </div>
+                
                 <div class="text-input">
-                  <input :placeholder="'给' + state.channel.channel_name + '发送信息'" v-model="state.send_value" @keyup.enter="method.send_message(0)"/>
+                  <input 
+                    :placeholder="'给' + state.channel.channel_name + '发送信息'" 
+                    v-model="state.send_value" 
+                    @keyup.enter="method.send_message(0)"
+                    ref="send_box"
+                  />
                   <div class="icon-box">
                     <el-tooltip
                       :hide-after="0"
@@ -211,7 +232,10 @@ const method = reactive({
                       placement="top"
                       :enterable="false"
                     >
-                    <el-icon class="send-audio" :size="20" color="rgb(255,255,255)" ><PictureRounded class="item"/></el-icon>
+                    <el-icon class="icon" :size="20" color="rgb(255,255,255)" @click="() =>{state.emoji_box = !state.emoji_box}">
+                      <PictureRounded class="item"/>
+                      <Emoji v-show="state.emoji_box" @emojiHandle = 'emojiHandle' :all="true" />
+                    </el-icon>
                     </el-tooltip>
                     <el-upload
                       class="uploader"
@@ -274,6 +298,7 @@ const method = reactive({
 .guild-chat{
   width: 100%;
   height: 100%;
+  position: relative;
   // overflow-y: hidden;
 }
 .chat-header{
@@ -460,6 +485,7 @@ const method = reactive({
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+
     .item{
       margin: 0 2px;
     }

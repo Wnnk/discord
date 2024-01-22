@@ -113,9 +113,9 @@ module.exports = appInfo => {
   };
   /* socket.io */
   config.io = {
-    init: {
-      wsEngine: 'ws',
-    },
+    // init: {
+    //   wsEngine: 'ws',
+    // },
     namespace: {
       '/chat': {
         connectionMiddleware: [ ],

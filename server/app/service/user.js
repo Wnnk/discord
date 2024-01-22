@@ -151,6 +151,28 @@ class UserService extends Service {
     }
     return ctx.fail('查询失败');
   }
+
+  /* 好友模糊搜索 */
+  async search() {
+    const { Op } = require('sequelize');
+    const { ctx } = this;
+    const search_key = ctx.request.body.search_key;
+    console.log(search_key);
+    const friends = await ctx.model.User.findAll({
+      where: {
+        user_name: {
+          [Op.like]: `%${search_key}%`,
+        },
+      },
+      limit: 10,
+      attributes: [ 'uuid', 'user_name', 'status', 'avator_url' ],
+    });
+    if (friends) {
+      return ctx.success('查询成功', friends);
+    }
+
+
+  }
 }
 module.exports = UserService;
 

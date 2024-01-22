@@ -22,12 +22,8 @@ class GuildChatController extends Controller {
   }
   async leaveChannel() {
     const { ctx } = this;
-
     const { channel_id } = ctx.args[0];
-
-
     ctx.socket.leave(channel_id);
-    console.log(`离开了${channel_id}房间`);
   }
 }
 
