@@ -1,6 +1,5 @@
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import {createApp} from 'vue'
-import VueVirtualScroller from 'vue3-virtual-scroller'
 import App from './App.vue'
 import router from "./routers/index"
 import ElementPlus from 'element-plus'
@@ -23,7 +22,6 @@ pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 app.use(ElementPlus)
 app.use(router)
-app.use(VueVirtualScroller)
 app.mount("#app")
 
 

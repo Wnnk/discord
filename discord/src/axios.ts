@@ -13,7 +13,7 @@ axios.interceptors.request.use((config) => {
 /*
 * 响应拦截器
 */
-axios.interceptors.response.use((res) => {
+axios.interceptors.response.use((res:any) => {
  
   const status = (res.status)
   switch (status) {

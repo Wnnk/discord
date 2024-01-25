@@ -11,7 +11,7 @@ const props = defineProps({
 const emit = defineEmits(['emojiHandle'])
 const res = getAllTypeEmojis();
 
-const emojiObj = ref({});
+const emojiObj = ref<any>({});
 if (props.all) {
   emojiObj.value = res;
 }else {

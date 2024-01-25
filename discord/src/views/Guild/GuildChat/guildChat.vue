@@ -26,8 +26,15 @@ const init = ()=>{
   method.channel_title(channel_id) // 频道信息
 
   /* socket 连接 */
-  socket.value = io('http://127.0.0.1:7001/guildChat',{
-    transports: ['polling'],
+  // socket.value = io('ws://127.0.0.1:7001/guildChat',{
+    
+  // })
+  socket.value = io("http://localhost:3000",{
+    withCredentials:true, 
+    allowEIO3: true,
+    extraHeaders: {
+      "my-custom-header": "abcd"
+    }
   })
   socket.value.on('connect',()=>{
     socket.value.emit('joinChannel',{
