@@ -80,5 +80,7 @@ export const staticRouter:Array<RouteRecordRaw> = [
     name:'sheet',
     component:()=> import('@/views/LuckeySheet/SheetMain.vue'),
   }
+  /* 论坛 */
+
 
 ]

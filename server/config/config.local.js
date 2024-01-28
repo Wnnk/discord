@@ -19,7 +19,7 @@ module.exports = () => {
       // 用户名
       user: 'root',
       // 密码
-      password: '1275056222',
+      password: 'Am1275056222',
       // 数据库名
       database: 'EggZoneFrame',
     },
@@ -39,7 +39,7 @@ module.exports = () => {
     // 用户名
     user: 'root',
     // 密码
-    password: '1275056222',
+    password: 'Am1275056222',
     // 数据库名
     database: 'EggZoneFrame',
     // 时区，sequelize有很多自动时间的方法，都是和时区相关的，记得设置成东8区（+08:00）

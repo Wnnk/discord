@@ -141,7 +141,7 @@ onMounted(()=>{
 
 <style lang='scss' scoped>
 .el-container{
-  height: 100%;
+  min-height: 100vh;
 }
 .box-header{
   display: flex;

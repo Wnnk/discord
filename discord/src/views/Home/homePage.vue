@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import topNav from './components/topNav/topNav.vue'
 import rightSide from "./components/rightSide/rightSide.vue"
+import introduction from './components/introduction/introduction.vue'
 import { reactive } from 'vue';
 import { globalStore } from '@/stores';
 import router from '@/routers';
+
   const store = globalStore()
   const state = reactive({
     right_side_show:false   //侧边栏状态
@@ -62,7 +64,8 @@ import router from '@/routers';
     
   </transition>
   
-
+  <!-- 介绍 -->
+  <introduction />
   
 </template>
 
