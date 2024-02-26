@@ -320,21 +320,21 @@ const emojiHandle = (item:string) => {
 
 <style lang='scss' scoped>
 .main-box{
- height: 100vh;
+//  height: 100vh;
  width: 100%;
  position: relative;
- overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #3f4147;
-    border-radius: 4px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: #313338;
-    border-radius: 4px;
-  }
+//  overflow-y: auto;
+//   &::-webkit-scrollbar {
+//     width: 5px;
+//   }
+//   &::-webkit-scrollbar-thumb {
+//     background-color: #3f4147;
+//     border-radius: 4px;
+//   }
+//   &::-webkit-scrollbar-track {
+//     background-color: #313338;
+//     border-radius: 4px;
+//   }
 }
 .chat-record-list{
   height: 0; /* 或其他固定的高度，如 height: 500px; */

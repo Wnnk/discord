@@ -1,0 +1,62 @@
+.thread{
+  min-height: 100%;
+  min-width: 400px;
+  cursor: col-resize;
+  background-color: $post-parimary;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  position: relative;
+  border-radius: 8px 0 0 8px;
+  overflow: hidden;
+  overflow-y: scroll;
+  align-items: stretch;
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+  }
+  
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.15);
+    transition: color 0.2s ease;
+  }
+}
+
+.thread-title{
+  align-items: flex-start;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin: 16px 16px 0;
+  h3{
+    font-weight: 500;
+    user-select: text;
+    margin: 8px 0;
+    font-size: 32px;
+    line-height: 1.25;
+    color: $text-thread-title;
+  }
+}
+.divider{
+  background-color: $divider;
+  height: 8px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+
+.thread-list{
+
+  overflow-y: auto;
+  min-height: 0;
+  min-width: 0;
+}

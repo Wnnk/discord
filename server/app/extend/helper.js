@@ -1,4 +1,5 @@
 const moment = require('moment');
+const EmailCode = require('../util/emailCode');
 module.exports = {
   // uuid格式：年月日时分秒3位毫秒+3位随机数，共20位  ===>   20190312162455043167
   uuidSet() {
@@ -29,4 +30,12 @@ module.exports = {
     console.log(result);
     return result;
   },
+  // 发送邮箱验证码
+  async sendEmailCode(receiver) {
+    return await EmailCode.sendEmailCode(this.ctx, receiver);
+  },
+  // 验证邮箱验证码
+  // verifyEmailCode(email, clientCode) {
+  //   return EmailCode.verifyEmailCode(email, clientCode);
+  // },
 };

@@ -10,13 +10,16 @@ module.exports = {
       user_email: STRING,
       user_name: STRING,
       user_type: INTEGER(10),
-      avator_url: STRING,
+      avator_url: {
+        type: STRING,
+        defaultValue: 'src/assets/images/avatar.jpg',
+      },
       login_num: INTEGER(10),
       create_time: DATE,
       last_login_time: DATE,
       note: STRING,
       status: INTEGER(20),
-
+      nickname: STRING(),
     });
   },
   // 在执行数据库降级时调用的函数，删除 user 表

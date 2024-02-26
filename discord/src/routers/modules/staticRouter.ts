@@ -79,8 +79,19 @@ export const staticRouter:Array<RouteRecordRaw> = [
     path:'/luckysheet/:Id',
     name:'sheet',
     component:()=> import('@/views/LuckeySheet/SheetMain.vue'),
-  }
+  },
   /* 论坛 */
-
+  {
+    path:'/forum',
+    name:'forum',
+    component:() => import('@/views/Forum/index.vue'),
+    children:[
+      {
+        path:'/forum/thread/:id',
+        name:'post',
+        component:() => import('@/views/Forum/threads/Threads.vue'),
+      }
+    ]
+  }
 
 ]

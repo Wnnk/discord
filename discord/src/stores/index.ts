@@ -16,9 +16,11 @@ export const globalStore = defineStore('globalStore', {
         last_login_time: new Date,
         login_num:Number,
         status:Number,
+        nickname:"",
       },
       friend_list:[] as Friend[],
       information:{},
+      threadsWidth: 500
     }
     
   },
@@ -26,6 +28,6 @@ export const globalStore = defineStore('globalStore', {
   actions:{},
   persist: {
     storage: sessionStorage,
-    paths:['user_info']
+    paths:['user_info','threadsWidth']
   }
 })

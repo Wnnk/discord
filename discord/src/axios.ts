@@ -73,7 +73,7 @@ export default function (url:string, {
     data: data,
     headers: headers,
     dataType: dataType,
-    withCredentials:true
+    withCredentials:true,
   }
   return axios(config)
 }

@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @Controller
 **/
@@ -12,8 +11,6 @@ class LoginController extends Controller {
     /**
     * @summary 鉴权回调
     * @description 鉴权回调接口
-    * @router post /login/callback
-    * @response 200 JsonResult 操作结果
     */
     const { ctx } = this;
     ctx.body = await this.service.user.loginCallBack();
@@ -23,10 +20,7 @@ class LoginController extends Controller {
     /**
     * @summary 注册
     * @description 注册接口
-    * @router post /user/register
-    * @request body user_register 配置请求携带参数
-    * @Request header string token eg：write your token at here
-    * @response 200 JsonResult 操作结果
+
     */
     const { ctx } = this;
     ctx.body = await this.service.user.register();
@@ -36,10 +30,6 @@ class LoginController extends Controller {
     /**
     * @summary 登录
     * @description 登录接口
-    * @router post /user/login
-    * @request body user_login 配置请求携带参数
-    * @Request header string token eg：write your token at here
-    * @response 200 JsonResult 操作结果
     */
     const { ctx } = this;
     ctx.body = await this.service.user.login();
@@ -49,9 +39,6 @@ class LoginController extends Controller {
     /**
     * @summary 退出登录
     * @description 退出登录接口
-    * @router post /user/logout
-    * @Request header string token eg：write your token at here
-    * @response 200 JsonResult 操作结果
     */
     const { ctx } = this;
     ctx.body = await this.service.user.logout();
@@ -62,9 +49,6 @@ class LoginController extends Controller {
     /**
     * @summary 查询用户好友
     * @description 查询好友接口
-    * @router post /user/friend
-    * @Request  header string token eg：write your token at here
-    * @response 200 JsonResult 操作结果
     */
     const { ctx } = this;
     ctx.body = await this.service.user.friend();
@@ -72,12 +56,31 @@ class LoginController extends Controller {
   }
   /**
    * @description 好友模糊搜索
-   * @router post /user/search
-   * 
+   *
    */
   async search() {
     const { ctx } = this;
     ctx.body = await this.service.user.search();
+  }
+
+  /**
+   * @description 用户更新自身信息
+  **/
+  async changeInfo() {
+    const { ctx } = this;
+    ctx.body = await this.service.user.changeInfo();
+  }
+
+  /**
+   * @description stmp发送邮箱验证码
+   */
+  async captcha() {
+    const { ctx } = this;
+    ctx.body = await this.service.user.captcha();
+  }
+  async test() {
+    const { ctx } = this;
+    ctx.body = await this.service.user.test();
   }
 }
 

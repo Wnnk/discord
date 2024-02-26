@@ -1,6 +1,5 @@
 'use strict';
 const moment = require('moment');
-const { Op, Sequelize } = require('sequelize');
 module.exports = app => {
   const { INTEGER, DATE, DataTypes } = app.Sequelize;
 

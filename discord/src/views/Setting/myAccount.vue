@@ -1,49 +1,146 @@
 <script setup lang='ts'>
-import  {reactive} from 'vue'
-const state =  reactive({
-  user:{
-    avatar:new URL("@/assets/images/avatar.jpg",import.meta.url).href,
-    name:"广东分公司的",
-    id:2032
-  },
-  user_set:[
-    {title:"昵称",contain:"您还没有添加昵称"},
-    {title:"用户名",contain:"广东分公司的"},
-    {title:"电子邮件",contain:""},
-    {title:"自我介绍",contain:""},
-  ]
-})
+import  { ref } from 'vue'
+import { globalStore } from '@/stores/index'
+import { ElMessage } from 'element-plus'
+import axios from '@/axios';
+import { encrypt } from '@/encrypt';
+import router from "@/routers";
+  const info = globalStore()
+
+
+  let changeDialog = ref(false);
+  const changeInfo = ref({
+    nickname:info.user_info.nickname,
+    username:info.user_info.user_name,
+    email:info.user_info.user_email,
+    note:info.user_info.note,
+    password:''
+  });
+  /** 
+   * @description 修改用户信息
+   * 
+   **/  
+  const onSubmitInfo = async () =>{
+    if(changeInfo.value.password === '') {
+      ElMessage({
+        message:"密码不能为空",
+        type:"error"
+      })
+      changeDialog.value = false;
+      return 
+    }
+    /* 数据加密 */
+    const data = encrypt.encrypt(JSON.stringify(changeInfo.value));
+    /* 发送请求 */
+    const changeResult =  await axios('/user/changeInfo',{
+      data:{data}
+    })
+    if(changeResult.data.data.statu !== 200) {
+      /* 失败 */
+      ElMessage({
+        message:'密码或服务器发生错误',
+        type:"error"
+      })
+    }else {
+      ElMessage({
+        message:"修改成功",
+        type:"success"
+      })
+      /* 修改储存的用户信息 */
+      const updatedInfo = changeResult.data.data.result;
+      info.user_info = updatedInfo;
+    }
+    changeInfo.value.password = ''
+    changeDialog.value = false;
+  }
+  
+
+
 </script>
 
 <template>
   <div class="account">
     <h2 class="title">我的账号</h2>
+    <i class="iconfont icon-cuowuguanbiquxiao-xianxingyuankuang home-icon" @click="router.push('/main/private')"></i>
     <div class="my-account">
       <div class="banner">
 
       </div>
       <div class="user-info">
         <div class="user-avatar">
-          <el-avatar :src="state.user.avatar"></el-avatar>
+          <el-avatar :src="info.user_info.avator_url"></el-avatar>
         </div>
         <div class="user-name">
-          <span class="name">{{state.user.name}}</span>
-          <span class="id">#{{state.user.id}}</span>
+          <span class="name">{{info.user_info.user_name}}</span>
+          <span class="id">#{{info.user_info.uuid}}</span>
         </div>
       </div>
 
       <div class="user-detail">
         <div class="user-field">
-          <div class="filed" v-for="item in state.user_set">
+          <div class="filed">
             <div class="detail">
-              <h3 class="detail-title">{{item.title}}</h3>
-              <span class="detail-contain">{{item.contain}}</span>
+              <h3 class="detail-title">昵称</h3>
+              <span class="detail-contain">{{info.user_info.nickname}}</span>
             </div>
-            <el-button class="detail-button">编辑</el-button>
           </div>
+          <div class="filed">
+            <div class="detail">
+              <h3 class="detail-title">用户名</h3>
+              <span class="detail-contain">{{info.user_info.user_name}}</span>
+            </div>
+          </div>
+          <div class="filed">
+            <div class="detail">
+              <h3 class="detail-title">电子邮箱</h3>
+              <span class="detail-contain">{{info.user_info.user_email}}</span>
+            </div>
+          </div>
+          <div class="filed">
+            <div class="detail">
+              <h3 class="detail-title">自我介绍</h3>
+              <span class="detail-contain">{{info.user_info.note || '这个人很懒没有留下什么'}}</span>
+            </div>
+          </div>
+          <el-button class="detail-button" @click="changeDialog =true">编辑</el-button>
         </div>
       </div>
     </div>
+
+    <!-- 更改dialog -->
+    <el-dialog v-model="changeDialog" center width="40%">
+        <div class="header">
+          <div class="header-title">更改用户信息</div>
+          <div class="header-tip">输入新的信息与现有密码</div>
+        </div>
+        <el-form 
+          :model="changeInfo" 
+          label-position = "top"
+          class = "dialog-form"
+          label-width = "20px"
+        >
+          <el-form-item label="用户名">
+            <el-input v-model="changeInfo.username"></el-input>
+          </el-form-item>
+          <el-form-item label="昵称">
+            <el-input v-model="changeInfo.nickname"></el-input>
+          </el-form-item>
+          <el-form-item label="电子邮箱">
+            <el-input v-model="changeInfo.email"></el-input>
+          </el-form-item>
+          <el-form-item label="自我介绍">
+            <el-input v-model="changeInfo.note"></el-input>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="changeInfo.password"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="onSubmitInfo">保存</el-button>
+          </el-form-item>
+        </el-form>
+
+
+    </el-dialog>
 
     <div class="underlink"></div>
    
@@ -66,6 +163,11 @@ const state =  reactive({
    width: 2px; 
    height: 5px;
   }
+}
+.home-icon{
+  position: absolute;
+  right: 20%;
+  font-size: 48px;
 }
 .title{
   margin-bottom: 20px;
@@ -176,6 +278,47 @@ const state =  reactive({
   border: none;
   color: #FFFFFF;
   cursor: pointer;
+}
+/* dialog样式 */
+:deep(.el-dialog){
+  background-color: #4e5058 ;
+  .header{
+    .header-title{
+      font-weight: 700;
+      text-align: center;
+      font-size: 24px;
+      line-height: 30px;
+      color: #FFF;
+    }
+    .header-tip{
+      margin-top: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.25;
+      font-weight: 400;
+      color: #B5BAC1;
+    }
+  }
+
+  .dialog-form{
+    label{
+      color: #B5BAC1;
+    }
+
+    .el-input__wrapper{
+      background-color: #1E1F22;
+      box-shadow: none;
+    }
+    .el-input__inner{
+     font-size: 16px;
+     box-sizing: border-box;
+     border-radius: 3px;
+     color: rgb(219, 222, 225);
+    }
+  
+  }
+
 }
 .underlink{
   border: rgba(78, 80, 88, 0.48) solid 0.05px;

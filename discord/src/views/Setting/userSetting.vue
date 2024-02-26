@@ -50,7 +50,7 @@ const state = reactive({
 <template>
   <div class="setting">
     <el-container>
-      <al-aside class="left-nav">
+      <el-aside class="left-nav">
         <div class="nav-item" v-for="item in state.nav" :key="item.title">
           <div class="name">{{item.title}}</div>
           <div class="link-item" v-for="link in item.link " :key="link.name">
@@ -58,7 +58,7 @@ const state = reactive({
           </div>
           <div class="underlink"></div>
         </div>
-      </al-aside>
+      </el-aside>
       <el-main>
         <router-view></router-view>
       </el-main>

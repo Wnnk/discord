@@ -9,9 +9,8 @@ export default defineConfig({
   base:'./',
   plugins: [vue()],
   server:{
-    // port:7001,
     proxy:{
-     
+
     },
   },
   resolve: {
@@ -20,5 +19,13 @@ export default defineConfig({
     },
     
   },
+  css:{
+    preprocessorOptions:{
+      scss:{
+        additionalData:'@import "src/assets/css/blogalCss.scss";',
+        javascriptEnabled:true,
+      }
+    }
+  }
   
 })

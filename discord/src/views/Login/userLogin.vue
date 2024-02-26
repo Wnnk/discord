@@ -33,7 +33,7 @@ const method = reactive({
           type: 'success'
         })
         store_data.user_info = res.data.data.result
-        store_data.token = res.data.data.token
+        store_data.token = res.data.data.token;
         sessionStorage.setItem('token',store_data.token)
         router.push('/main/private')
       }else {

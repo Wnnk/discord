@@ -13,12 +13,16 @@ module.exports = app => {
   const upLoad = middleware.upload();
 
   /* user */
+  // 发送邮箱验证码
+  router.post('/user/captcha', controller.user.captcha);
   /* register */
   router.post('/user/register', controller.user.register);
   // login
   router.post('/user/login', controller.user.login);
   // logout
   router.post('/user/logout', controller.user.logout);
+  // 更改用户信息
+  router.post('/user/changeInfo', jwtErr, controller.user.changeInfo);
   // friend_list
   router.post('/user/friend', jwtErr, controller.user.friend);
   // 好友搜索
@@ -78,5 +82,13 @@ module.exports = app => {
   // 导入.xlsx文件
   router.post('/sheet/import', jwtErr, controller.sheet.improtFile);
 
-
+  /* 论坛接口 */
+  // 发布帖子
+  router.post('/post/create', jwtErr, controller.post.newPost);
+  // 回复帖子
+  router.post('/reply', jwtErr, controller.post.replyPost);
+  // 帖子列表获取
+  router.post('/post/list', jwtErr, controller.post.getPostList);
+  // 帖子详细内容获取
+  router.post('/thread', jwtErr, controller.post.getPostDetail);
 };

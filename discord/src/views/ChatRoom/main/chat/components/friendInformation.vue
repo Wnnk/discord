@@ -105,7 +105,7 @@ const state = reactive({
 
 <style lang='scss' scoped>
 .information{
-  height: 100vh;
+  // height: 100vh;
   position: relative;
   box-sizing: border-box;
   min-height: 0;

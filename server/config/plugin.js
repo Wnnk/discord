@@ -44,5 +44,13 @@ module.exports = {
     enable: true,
     package: 'egg-websocket-plugin',
   },
+  // sessionRedis: {
+  //   enable: true,
+  //   package: 'egg-session-redis',
+  // },
+  // redis: {
+  //   enable: true,
+  //   package: 'egg-redis',
+  // },
 
 };

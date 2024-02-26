@@ -77,20 +77,29 @@ module.exports = appInfo => {
     enable: true, // 默认 true (启用),
   };
 
+
   // 跨域配置
   config.security = {
     csrf: {
       enable: false,
       ignoreJSON: true,
     },
-    domainWhiteList: [ 'http://127.0.0.1:5173' ],
+    domainWhiteList: [ 'http://localhost:5173' ],
   };
   config.cors = {
-    origin: '*', /* 一定要是域名端口 */
+    origin: 'http://localhost:5173', /* 一定要是域名端口 */
     credentials: true, /* credentials设置为true,和前端保持一致 */
-    allowMethods: 'GET,POST',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
   };
-
+  // config.redis = {
+  //   client: {
+  //     host: '127.0.0.1',
+  //     port: 6379,
+  //     password: null,
+  //     bd: '0',
+  //   },
+  //   agent: true,
+  // };
   /* session配置 */
   config.session = {
     key: 'EGG_SESS', /* eggjs默认session的key */
@@ -130,6 +139,12 @@ module.exports = appInfo => {
         packetMiddleware: [],
       },
     },
+  };
+  config.smtp = {
+    host: 'smtp.qq.com',
+    port: 465,
+    user: '1275056222@qq.com',
+    pass: 'ugcddycxnbrdigej',
   };
   // config.websocket = {
   //   redis: {

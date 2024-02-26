@@ -8,9 +8,6 @@ const moment = require('moment');
 
 class UserService extends Service {
 
-  async say() {
-    return 'Hello Man!';
-  }
 
   /* 登录 */
   async login() {
@@ -43,6 +40,7 @@ class UserService extends Service {
       // 存储session参数
       ctx.session.uuid = user.dataValues.uuid;
       ctx.session.user_email = user_email;
+      console.log(ctx.session);
       // console.log('登录session参数', ctx.session.uuid);
       const result = {
         create_time: user.create_time,
@@ -53,12 +51,88 @@ class UserService extends Service {
         user_name: user.user_name,
         uuid: user.uuid,
         note: user.note,
-        status: user.menu.status,
+        status: user.status,
+        nickname: user.nickname,
       };
       return ctx.success('登录成功!', { result, token });
     }
     return ctx.fail('用户名或密码错误!');
   }
+
+  /* 用户信息修改 */
+  async changeInfo() {
+    const { ctx } = this;
+
+    // 设置私钥
+    const prvKey = this.app.config.private_key;
+    const jsencrypt = new JSEncrypt();
+    jsencrypt.setPrivateKey(prvKey);
+
+    // 解密数据
+    const preData = ctx.request.body.data;
+    /* 修改信息以及密码 */
+    const info = JSON.parse(jsencrypt.decrypt(preData));
+    const password = info.password;
+    /* uuid */
+    const uuid = ctx.helper.uuidGet();
+    /* 校验密码正确性 */
+    const isUser = await ctx.model.User.findOne({
+      include: {
+        as: 'menu',
+        model: ctx.model.UserLogin,
+      },
+      where: {
+        uuid,
+      },
+    });
+    if (!isUser) {
+      return ctx.fail('用户不存在!');
+    }
+    /* 校验重名 */
+    const is_user_name = await ctx.model.User.findOne({
+      where: {
+        user_name: info.user_name,
+      },
+    });
+    if (is_user_name !== null) {
+      return ctx.fail('用户名已存在!');
+    }
+    /* 校验密码 */
+    const isPasswordTrue = bcrypt.compareSync(password, isUser.dataValues.menu.dataValues.user_password);
+    if (isPasswordTrue) {
+      /* 密码正确，更新用户信息 */
+      const isUpdateInfo = await ctx.model.User.update({
+        nickname: info.nickname,
+        user_name: info.user_name,
+        user_email: info.user_email,
+        note: info.note,
+      }, { where: { uuid } });
+      if (isUpdateInfo) {
+        const user = await ctx.model.User.findOne({
+          where: {
+            uuid,
+          },
+        });
+        const result = {
+          create_time: user.create_time,
+          avator_url: user.avator_url,
+          login_num: user.login_num,
+          last_login_time: user.last_login_time,
+          user_email: user.user_email,
+          user_name: user.user_name,
+          uuid: user.uuid,
+          note: user.note,
+          status: user.status,
+          nickname: user.nickname,
+        };
+
+        return ctx.success('修改成功!', { statu: 200, result });
+      }
+      return ctx.fail('修改失败!', { statu: 500 });
+    }
+    return ctx.fail('密码错误!', { statu: 400 });
+  }
+
 
   /* 用户注册 */
   async register() {
@@ -70,10 +144,34 @@ class UserService extends Service {
     // 解密数据
     const paramsData = ctx.request.body.resParams;
     const prvData = JSON.parse(jsencrypt.decrypt((paramsData)));
-    // 查找注册账号是否存在
+    // 校验验证码
+    const serverCaptha = await ctx.model.EmailCode.findOne({
+      where: {
+        email: prvData.user_email,
+        code: prvData.email_captcha,
+      },
+    });
+    const serverExpire = serverCaptha.dataValues.expiration_time;
+    if (Date.now() > serverExpire) {
+      /* 验证码过期 */
+      await ctx.model.EmailCode.destroy({
+        where: {
+          email: prvData.user_email,
+        },
+      });
+      return ctx.warn('验证码已经过期');
+    }
+
+    // 查找注册账号是否已经存在
     const is_user_email = await ctx.model.User.findOne({
       where: {
         user_email: prvData.user_email,
+      },
+    });
+    // 重名问题
+    const is_user_name = await ctx.model.User.findOne({
+      where: {
+        user_name: prvData.user_name,
       },
     });
     if (!prvData.user_email || prvData.user_email === '') {
@@ -82,6 +180,8 @@ class UserService extends Service {
       return ctx.warn('密码不能为空');
     } else if (is_user_email != null) {
       return ctx.warn('账号已被注册');
+    } else if (is_user_name != null) {
+      return ctx.warn('昵称已被注册');
     }
     {
       // 对密码进行hash加密，salt加盐
@@ -99,8 +199,7 @@ class UserService extends Service {
       };
 
       try {
-        const a = await ctx.model.UserLogin.create(params);
-        console.log(a);
+        await ctx.model.UserLogin.create(params);
         res = await ctx.model.User.create(params);
         ctx.logger.info(res);
         return ctx.success('注册成功');
@@ -124,6 +223,11 @@ class UserService extends Service {
       return ctx.success('登出成功！');
     }
     return ctx.fail('登出失败！');
+  }
+
+  async test() {
+    const { ctx } = this;
+    console.log(ctx);
   }
 
   async friend() {
@@ -170,8 +274,35 @@ class UserService extends Service {
     if (friends) {
       return ctx.success('查询成功', friends);
     }
+  }
 
-
+  async captcha() {
+    const { ctx } = this;
+    try {
+      const { email } = ctx.request.body;
+      const isUser = await ctx.model.User.findOne({
+        where: {
+          user_email: email,
+        },
+      });
+      if (isUser) {
+        return ctx.fail('用户已经存在');
+      }
+      const data = await ctx.helper.sendEmailCode(email);
+      if (data) {
+        /* Code储存数据库 */
+        const params = {
+          email,
+          code: data.code,
+          expiration_time: data.expiration_time,
+          create_time: data.create_time,
+        };
+        await ctx.model.EmailCode.create(params);
+        return ctx.success({ mag: '验证码发送成功' });
+      }
+    } catch (error) {
+      return ctx.fail(`${error}`);
+    }
   }
 }
 module.exports = UserService;

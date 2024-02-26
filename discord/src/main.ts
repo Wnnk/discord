@@ -7,8 +7,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-
-
+import '@/assets/css/icon.css'
+// import "@/assets/css/blogalCss.scss"
 
 
 const app = createApp(App)
