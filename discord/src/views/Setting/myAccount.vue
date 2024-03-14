@@ -5,8 +5,8 @@ import { ElMessage } from 'element-plus'
 import axios from '@/axios';
 import { encrypt } from '@/encrypt';
 import router from "@/routers";
-  const info = globalStore()
 
+const info = globalStore()
 
   let changeDialog = ref(false);
   const changeInfo = ref({
@@ -53,8 +53,73 @@ import router from "@/routers";
     changeInfo.value.password = ''
     changeDialog.value = false;
   }
-  
 
+/**  
+ * @description 密码更改
+ * 
+*/
+let passwordDialog = ref(false);
+const passwordInfo = ref({
+  oldPassword:'',
+  newPassword:'',
+  confirmPassword:'',
+})
+const onSubmitPassword  = async() => {
+  /* 比较两次密码 */
+  if (passwordInfo.value.newPassword !== passwordInfo.value.confirmPassword) {
+    ElMessage({
+      message:"两次密码不一致",
+      type:"error"
+    })
+    return
+  }
+  /* 加密数据 */
+  const data = encrypt.encrypt(JSON.stringify(passwordInfo.value));
+  /* 发送请求 */
+  const res = await axios('/user/changePassword',{
+    data:{data}
+  })
+  if(res.data.code === '0') {
+    ElMessage({
+      message: res.data.msg,
+      type:"success",
+    })
+    return
+  } 
+  ElMessage({
+    message: res.data.msg,
+    type:"error",
+  })
+  const keys = Object.keys(passwordInfo.value) as (keyof typeof passwordInfo.value)[];
+  keys.forEach(key => {
+    passwordInfo.value[key] = ''
+  })
+  passwordDialog.value = false;
+  return    
+}
+
+/** 
+ * @description 退出登录
+ */
+const logout = async () => {
+  const res = await axios('/user/logout',{})
+  if(res.data.code === '0') {
+    localStorage.setItem('token','')
+    localStorage.setItem('globalStore','')
+    localStorage.setItem('refreshToken','')
+    ElMessage({
+      message: res.data.msg,
+      type:"success",
+    })
+    router.push('/');
+    return
+  }
+  ElMessage({
+    message: res.data.msg,
+    type:"error",
+  })
+  return
+}
 
 </script>
 
@@ -146,8 +211,39 @@ import router from "@/routers";
    
     <div class="user-password">
       <h2 class="password-title">密码与验证</h2>
-      <el-button class="password-button">更改密码</el-button>
+      <el-button class="password-button" @click="passwordDialog = true">更改密码</el-button>
     </div>
+
+    <!-- 更改密码 -->
+    <el-dialog v-model="passwordDialog" width="40%" center>
+      <div class="header">
+        <div class="header-title">更改用户密码</div>
+      </div>
+      <el-form
+        :model="passwordInfo"
+        label-position = "top"
+        class = "dialog-form"
+        label-width = "20px"
+      >
+        <el-form-item label="原密码">
+          <el-input v-model="passwordInfo.oldPassword" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="新密码">
+          <el-input v-model="passwordInfo.newPassword" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="确认新密码">
+          <el-input v-model="passwordInfo.confirmPassword" show-password></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="onSubmitPassword">确认修改</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <div class="underlink"></div>
+
+    <!-- 登出 -->
+    <el-button type="danger" class="account-out" @click="logout">登出账号</el-button>
   </div>
   
 </template>
@@ -335,5 +431,8 @@ import router from "@/routers";
   background-color: #5865F2;
   color: #FFFFFF;
   border: none;
+}
+.account-out{
+  margin-top: 20px;
 }
 </style>

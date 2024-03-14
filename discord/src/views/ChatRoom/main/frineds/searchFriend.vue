@@ -1,13 +1,13 @@
 <script setup lang='ts'>
-import  {ZoomIn} from "@element-plus/icons-vue"
 import { ref } from 'vue';
 import axios from "@/axios";
 import { debounce } from '@/utils/debounce'
+import { ElMessage } from 'element-plus';
 
 const search_key = ref('');
 const search_result = ref(false);
 const search_list = ref<userSearch[]>([]);
-
+const select_user = ref<userSearch>();
 type userSearch = {
   avator_url:string,
   uuid:string,
@@ -15,6 +15,9 @@ type userSearch = {
   status:number,
 }
 
+/**
+ *  @description 搜索用户
+*/
 const  fuzzySearch = debounce(async () => {
    /* 过滤空格 */
    search_key.value = search_key.value.trim();
@@ -35,6 +38,55 @@ const  fuzzySearch = debounce(async () => {
 }, 1000);
 
 
+/**  
+ * @description 添加好友
+*/
+const addFriend = async (user_name?:string,user_info?:userSearch) => {
+  const addFriendForm = {
+    friend_name:'',
+    friend_uuid:'',
+  }
+  if (user_name) {
+    /* 仅通过输入查询用户 */
+    addFriendForm.friend_name = user_name;
+  }else if(user_info) {
+    /* 通过下拉框选中用户 */
+    search_key.value = user_info.user_name;
+    addFriendForm.friend_name = user_info.user_name;
+    addFriendForm.friend_uuid = user_info.uuid;
+  }else {
+    return;
+  }
+  /* 发送添加好友请求 */
+  const addFriendRes =  await axios('/information/addFriend',{
+    data:addFriendForm
+  })
+  if (addFriendRes.data.code ='0') {
+    ElMessage({
+      message: addFriendRes.data.msg,
+      type: 'success',
+    })
+    return
+  }
+  ElMessage({
+    type:'error',
+    message: addFriendRes.data.msg,
+  })
+
+  
+}
+
+
+/** 
+ * @description 选中用户 
+*/
+const selectUser = async (check_user:userSearch) => {
+  search_key.value = check_user.user_name;
+  select_user.value = check_user;
+  console.log(select_user.value);
+}
+
+
 </script>
 
 <template>
@@ -42,15 +94,17 @@ const  fuzzySearch = debounce(async () => {
       <el-input
         class="search-input"
         v-model="search_key"
-        placeholder="搜索好友"
-        :suffix-icon="ZoomIn"
+        placeholder="Enter 发送添加好友申请"
         @input="fuzzySearch()"
         @blur="search_result = false"
       >
+        <template #append>
+          <el-button class="search-addfriend" @click="addFriend(search_key,select_user)">添加好友</el-button>
+        </template>
       </el-input>
       <transition name="fuzzySearchResult">
         <div class="search-result" v-show="search_result">
-          <div class="search-item" v-for="item of search_list" :key="item.uuid">
+          <div class="search-item" v-for="item of search_list" :key="item.uuid" @click="selectUser(item)">
               <el-avatar :src=item.avator_url  class="user-avator"/>
               <span class="user-name">{{ item.user_name }}</span>
           </div>
@@ -88,6 +142,11 @@ const  fuzzySearch = debounce(async () => {
       background-color: #1e1f22;
       box-shadow: unset;
   }
+
+ :deep(.el-input-group__append) {
+   background-color: #1e1f22;
+   box-shadow: -1px 0px 0px ;
+ }
 }
 /* 模糊搜索结果下拉框 */
 .search-result{

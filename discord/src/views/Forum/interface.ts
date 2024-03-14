@@ -18,6 +18,13 @@ type ReplyListProp = {
   parent_content?:string,
   user_id:string,
 }
+type ReplyThreadProp = {
+  isReply:boolean,
+  post_id:string,
+  parent_reply_id:string | null,
+  parent_name:string | null,
+  content:string,
+}
 
 
-export type{ ThreadHeadPorp , ReplyListProp}
+export type{ ThreadHeadPorp , ReplyListProp, ReplyThreadProp}

@@ -9,7 +9,7 @@ import { globalStore } from '@/stores/index'
 const store_data = globalStore()
 const state = reactive({
   form:{
-    user_email:"1275056222@qq.com",
+    user_email:"deremal666@hdrlog.com",
     user_password:"2222",
   }
 })
@@ -34,7 +34,9 @@ const method = reactive({
         })
         store_data.user_info = res.data.data.result
         store_data.token = res.data.data.token;
-        sessionStorage.setItem('token',store_data.token)
+        store_data.refreshToken = res.data.data.refreshToken
+        localStorage.setItem('token',store_data.token!);
+        localStorage.setItem('refreshToken',store_data.refreshToken!)
         router.push('/main/private')
       }else {
         ElMessage({
@@ -68,7 +70,7 @@ const method = reactive({
               required: true,
             }"
           >
-            <el-input class="user-input" v-model="state.form.user_email"></el-input>
+            <el-input class="user-input" v-model="state.form.user_email" placeholder="deremal666@hdrlog.com/1@qq.com"></el-input>
           </el-form-item>
           <el-form-item 
             label="密码" 
@@ -77,7 +79,7 @@ const method = reactive({
               required: true,
             }"
           >
-            <el-input class="user-input " type="password" v-model="state.form.user_password"></el-input>
+            <el-input class="user-input " type="password" v-model="state.form.user_password" placeholder="2222"></el-input>
           </el-form-item>
           <div class="forget">忘记密码?</div>
           

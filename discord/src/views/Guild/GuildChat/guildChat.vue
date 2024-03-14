@@ -30,7 +30,7 @@ const init = ()=>{
     
   })
   socket.value.on('connect',()=>{
-    socket.value.emit('joinChannel',{
+    socket.value!.emit('joinChannel',{
       channel_id,
     })
   })
@@ -42,7 +42,7 @@ const init = ()=>{
 }
 
 const disconnetSocket = () => {
-  socket.value.emit('leaveChannel',{
+  socket.value!.emit('leaveChannel',{
     channel_id:state.base_data.channel_id,
   })
   
@@ -64,8 +64,8 @@ const state = reactive({
   channel:{} as Channel,
   send_value:'',
   author:{
-    'authorization':sessionStorage.getItem('token'),
-    'token':sessionStorage.getItem('token'),
+    'authorization':localStorage.getItem('token'),
+    'token':localStorage.getItem('token'),
   },
   base_data:{
     group_id:-1,
@@ -138,7 +138,7 @@ const method = reactive({
     })
   },
   socket_channel_message() {
-    socket.value.emit('channelMessage',{
+    socket.value!.emit('channelMessage',{
       channel_id:state.base_data.channel_id
     })
   }

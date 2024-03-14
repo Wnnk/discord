@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'; 
+import { ref, onMounted, onUnmounted  } from 'vue'; 
 import { ChatDotRound } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import axios from '@/axios';
 import router  from '@/routers'
-
+import { debounce } from '@/utils/debounce'
 
 const newPost = ref({
   title:'',
@@ -30,7 +30,7 @@ const onSubmitNewPost = async (form:NewPostProops) => {
   newPost.value.title = ''
   newPost.value.content = ''
   if (statu.data.data.statu === 200) {
-    getPostList()
+    getPostList(postList.value.length);
     return
   }
   ElMessage({
@@ -62,8 +62,12 @@ type PostInfo = {
   avator_url:string,
 }
 let postList = ref<PostListProops[]>([])
-const getPostList = async () => {
-  const list = await axios('/post/list',{})
+const getPostList = async (limit:number = 10 ) => {
+  const list = await axios('/post/list',{
+    data:{
+      limit,
+    }
+  })
   if (list.data.data.statu === 200) {
     postList.value = list.data.data.result
     return
@@ -75,19 +79,69 @@ const getPostList = async () => {
 
 }
 
-onMounted(() => {
-  getPostList();
+/**
+ * @description 改变浏览量和留言量 
+
+*/
+const updateViewAndMessageCount = async () => {
+  const res = await axios('/updateViewAndMessageCount',{
+    data:{
+      List:postList.value,
+      limit: postList.value.length | 10,
+    }
+  })
+  const data = res.data.data;
+  console.log(res);
+  if (data.statu === 200) {
+    postList.value = data.result;
+  }
+
+}
+
+let intervalGetVireCountAndMessageCount:ReturnType<typeof setInterval>;
+onMounted(async () => {
+  /* 初始化帖子列表 */
+  await getPostList();
+  /* 定时刷新浏览量和留言量 */
+   intervalGetVireCountAndMessageCount = setInterval(() => {
+    console.log('更新')
+    updateViewAndMessageCount();
+  }, 1000 * 60 * 5);
+})
+
+onUnmounted(() =>{
+  clearInterval(intervalGetVireCountAndMessageCount);
 })
 
 /** 
  * @description 进入帖子详细页面
  * 
 */
-const goToPostDetail = (id:string) => {
+const goToPostDetail = async (id:string) => {
+  /* 跳转url */
   router.push({
     path:`/forum/thread/${id}`
-  })
+  });
+  /* 前端暂时修改浏览量 */
+  postList.value.forEach(item => {
+    if (item.id === id) {
+      item.view_count++
+    }
+  });
 }
+
+/**
+ * @description 检测是否滚动到底，更新postList 
+*/
+const postListScroll = ref<null | HTMLElement>(null);
+const scrollBottom = debounce(() => {
+  const container = postListScroll.value as HTMLElement;
+
+  if (container.scrollTop + container.clientHeight + 200 >= container.scrollHeight) {
+    /* 滚动条触底 */
+    getPostList(postList.value.length + 10);
+  }
+}, 500)
 
 </script>
 
@@ -107,7 +161,7 @@ const goToPostDetail = (id:string) => {
     </el-form>
     <div class="layout">
       <div class="forum">
-        <div class="post-list">
+        <div class="post-list" ref="postListScroll" @scroll="scrollBottom()">
           <div class="post-card" @click="goToPostDetail(item.id)" v-for="item of postList" :key="item.id">
             <div class="post-card-title">
               <h3>{{item.title}}</h3>
@@ -119,13 +173,14 @@ const goToPostDetail = (id:string) => {
               </div>
             </div>
             <div class="post-footer">
-              <i class="iconfont icon-dianzan_kuai dianzan" @click.stop="console.log(1)"></i>
-              <div class="dianzan-count">{{item.view_count}}</div>
+              <i class="iconfont icon-liulanliang dianzan" @click.stop="console.log(1)"></i>
+              <div class="liulanliang-count">{{item.view_count}}</div>
               <i class="iconfont icon-24gf-bubble message"></i>
               <div class="message-count">{{item.reply_count}}</div>
             </div>
           </div>
         </div>
+        
         <div class="post">
           <router-view v-slot="{Component}" >
             <transition name="post-slide" mode="out-in">

@@ -3,7 +3,7 @@ import topNav from './components/topNav/topNav.vue'
 import rightSide from "./components/rightSide/rightSide.vue"
 import introduction from './components/introduction/introduction.vue'
 import { reactive } from 'vue';
-import { globalStore } from '@/stores';
+import { globalStore } from '@/stores/index';
 import router from '@/routers';
 
   const store = globalStore()

@@ -9,7 +9,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to,from,next)=>{
-	const token = sessionStorage.getItem('token')
+	const token = localStorage.getItem('token')
 	if(to.path !== '/login' && token === undefined) {
 		next('/login')
 	}

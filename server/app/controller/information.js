@@ -29,6 +29,14 @@ class InformationController extends Controller {
     const { ctx } = this;
     ctx.body = await this.service.information.relationship();
   }
+
+  async addFriend() {
+    /**
+     * @description 好友添加请求
+     */
+    const { ctx } = this;
+    ctx.body = await this.service.information.addFriend();
+  }
 }
 
 module.exports = InformationController;

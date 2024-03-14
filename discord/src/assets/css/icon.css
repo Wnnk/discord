@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4428080 */
-  src: url('//at.alicdn.com/t/c/font_4428080_7h6ydeso55w.woff2?t=1706934036506') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4428080_7h6ydeso55w.woff?t=1706934036506') format('woff'),
-       url('//at.alicdn.com/t/c/font_4428080_7h6ydeso55w.ttf?t=1706934036506') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_4428080_tuew3tgulsh.woff2?t=1709736064070') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4428080_tuew3tgulsh.woff?t=1709736064070') format('woff'),
+       url('//at.alicdn.com/t/c/font_4428080_tuew3tgulsh.ttf?t=1709736064070') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,28 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+.icon-cuowuguanbiquxiao:before {
+  content: "\e8e8";
+}
+
+.icon-confirm-line:before {
+  content: "\e62a";
+}
+
+.icon-tongyi:before {
+  content: "\e63d";
+}
+
+.icon-htmal5icon19:before {
+  content: "\e637";
+}
+
+.icon-liulanliang:before {
+  content: "\e627";
 }
 
 .icon-gif:before {

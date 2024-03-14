@@ -116,8 +116,8 @@ const method = reactive({
     formData.append('uuid',otherData.uuid)
     http.post('http://127.0.0.1:7001/message/upload',formData,{
       headers: {
-        authorization: sessionStorage.getItem('token'),
-        token:sessionStorage.getItem('token'),
+        authorization: localStorage.getItem('token'),
+        token:localStorage.getItem('token'),
         'Content-Type': 'multipart/form-data',
       }
     }).then((res) =>{

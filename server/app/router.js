@@ -15,6 +15,8 @@ module.exports = app => {
   /* user */
   // 发送邮箱验证码
   router.post('/user/captcha', controller.user.captcha);
+  // 无感刷新token
+  router.post('/refretoken', controller.token.refreToken);
   /* register */
   router.post('/user/register', controller.user.register);
   // login
@@ -23,13 +25,17 @@ module.exports = app => {
   router.post('/user/logout', controller.user.logout);
   // 更改用户信息
   router.post('/user/changeInfo', jwtErr, controller.user.changeInfo);
+  // 更改用户密码
+  router.post('/user/changePassword', jwtErr, controller.user.changePassword);
   // friend_list
   router.post('/user/friend', jwtErr, controller.user.friend);
   // 好友搜索
   router.post('/user/search', jwtErr, controller.user.search);
   // 聊天界面的基本信息
   router.post('/information/public', jwtErr, controller.information.public);
-  // 改变好友关系
+  // 添加好友请求
+  router.post('/information/addFriend', jwtErr, controller.information.addFriend);
+  // 删除屏蔽好友关系
   router.post('/information/relationship', jwtErr, controller.information.relationship);
   // 朋友聊天发送信息
   router.post('/message/friend', jwtErr, controller.message.createFriendMessage);
@@ -91,4 +97,13 @@ module.exports = app => {
   router.post('/post/list', jwtErr, controller.post.getPostList);
   // 帖子详细内容获取
   router.post('/thread', jwtErr, controller.post.getPostDetail);
+  // 帖子浏览量,留言量更改
+  router.post('/updateViewAndMessageCount', controller.post.updateViewAndMessageCount);
+
+  /* 邮箱接口 */
+  // 获取邮箱信件
+  router.post('/email/emiallist', jwtErr, controller.email.getEmailList);
+  // 阅读完毕信件
+  router.post('/email/updateEmailStatus', jwtErr, controller.email.updateEmailStatus);
+
 };

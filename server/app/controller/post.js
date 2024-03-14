@@ -39,7 +39,18 @@ class PostController extends Controller {
   */
   async getPostDetail() {
     const { ctx } = this;
-    ctx.body = await this.service.post.getPostDetail();
+    const limit = ctx.request.body.limit;
+    ctx.body = await this.service.post.getPostDetail(limit);
   }
+
+  /**
+   * @description 更新帖子的浏览量和留言量
+  */
+  async updateViewAndMessageCount() {
+    const { ctx } = this;
+    const { List, limit } = ctx.request.body;
+    ctx.body = await this.service.post.updateViewAndMessageCount(List, limit);
+  }
+
 }
 module.exports = PostController;

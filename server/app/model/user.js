@@ -29,6 +29,7 @@ module.exports = app => {
     User.hasMany(app.model.Post, { as: 'userPost', foreignKey: 'user_id', sourceKey: 'uuid' });
     User.hasMany(app.model.Reply, { as: 'userReply', foreignKey: 'user_id', sourceKey: 'uuid' });
     User.hasMany(app.model.Reply, { foreignKey: 'parent_reply_id', sourceKey: 'uuid' });
+    User.hasMany(app.model.Email, { foreignKey: 'sender_uuid', sourceKey: 'uuid' });
     // app.model.User.hasMany(app.model.Message, { as: 'sender', foreignKey: 'sender_uuid' });
     // app.model.User.hasMany(app.model.Message, { as: 'receiver', foreignKey: 'receiver_uuid' });
   };

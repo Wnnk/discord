@@ -16,6 +16,49 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`eggzoneframe` /*!40100 DEFAULT CHARACTE
 
 USE `eggzoneframe`;
 
+/*Table structure for table `email` */
+
+DROP TABLE IF EXISTS `email`;
+
+CREATE TABLE `email` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `receiver_uuid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `sender_uuid` varchar(32) DEFAULT NULL,
+  `status` int DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `type` int DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `email` */
+
+insert  into `email`(`id`,`receiver_uuid`,`sender_uuid`,`status`,`content`,`title`,`type`,`create_time`) values 
+(4,'20230627200416867249','20230619224042592858',0,'邀请好友','title',0,'2024-03-05 14:03:21'),
+(5,'20230627200416867249','20230619224042592858',0,'邀请好友','title',0,'2024-03-05 14:04:02'),
+(6,'20230627200416867249','20230619224042592858',0,'邀请好友','title',0,'2024-03-05 14:04:51'),
+(7,'20230627200416867249','20230619224042592858',0,'邀请好友','title',0,'2024-03-05 14:05:34'),
+(8,'20230619224042592858','20230627200416867249',0,'测试邮件','test',0,'2024-03-06 20:07:16');
+
+/*Table structure for table `email-code` */
+
+DROP TABLE IF EXISTS `email-code`;
+
+CREATE TABLE `email-code` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) DEFAULT NULL,
+  `code` varchar(10) DEFAULT NULL,
+  `expiration_time` datetime DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `email-code` */
+
+insert  into `email-code`(`id`,`email`,`code`,`expiration_time`,`create_time`) values 
+(6,'bimigas836@lendfash.com','38131','2024-02-21 12:45:25','2024-02-21 12:40:25');
+
 /*Table structure for table `friend` */
 
 DROP TABLE IF EXISTS `friend`;
@@ -26,17 +69,18 @@ CREATE TABLE `friend` (
   `friend_uuid` varchar(255) DEFAULT NULL,
   `relationship` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `friend` */
 
 insert  into `friend`(`id`,`user_uuid`,`friend_uuid`,`relationship`) values 
-(1,'20230619224042592858','20230627200416867249',0),
 (2,'20230619224042592858','20230627200527563719',1),
 (3,'20230619224042592858','20230627200546097387',0),
 (4,'20230619224042592858','20230627200601394613',-1),
 (5,'20230619224042592858','20230627200616634772',1),
-(6,'20230627200527563719','20230619224042592858',1);
+(6,'20230627200527563719','20230619224042592858',1),
+(21,'20230619224042592858','20230627200416867249',0),
+(22,'20230627200416867249','20230619224042592858',0);
 
 /*Table structure for table `group` */
 
@@ -98,7 +142,7 @@ CREATE TABLE `group-chat` (
   `channel_id` varchar(255) DEFAULT NULL,
   `message_type` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `group-chat` */
 
@@ -129,7 +173,10 @@ insert  into `group-chat`(`id`,`group_id`,`sender_id`,`message`,`create_time`,`c
 (46,41,'20230627200527563719','666','2023-09-26 22:12:06','20230816213005446054',0),
 (47,41,'20230619224042592858','1','2023-10-11 21:17:11','20230816213005446054',0),
 (48,41,'20230619224042592858','2','2023-10-16 21:32:04','20230816213005446054',0),
-(49,41,'20230619224042592858','3','2023-10-16 21:32:04','20230816213005446054',0);
+(49,41,'20230619224042592858','3','2023-10-16 21:32:04','20230816213005446054',0),
+(50,43,'20230619224042592858','http://127.0.0.1:7001/guildChat/1704281399303.jpg','2024-01-03 19:06:49','20231227212953627494',1),
+(51,44,'20230619224042592858','?','2024-01-09 19:48:17','20231227213044837625',0),
+(52,43,'20230619224042592858','da?daf?','2024-01-09 19:48:17','20231227212953627494',0);
 
 /*Table structure for table `group-member` */
 
@@ -169,7 +216,7 @@ CREATE TABLE `message` (
   `attachment` varchar(255) DEFAULT NULL,
   `message_type` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `message` */
 
@@ -190,7 +237,74 @@ insert  into `message`(`id`,`sender_uuid`,`receiver_uuid`,`contain`,`create_time
 (92,'20230619224042592858','20230627200527563719','http://127.0.0.1:7001/upload/1691673701820.png','2023-08-10 21:21:37',0,0,NULL,1),
 (93,'20230619224042592858','20230627200527563719','http://127.0.0.1:7001/upload/1691673964939.jpg','2023-08-10 21:21:37',0,0,NULL,1),
 (94,'20230619224042592858','20230627200601394613','更低功耗鞥六年','2023-08-23 20:01:31',0,0,NULL,0),
-(95,'20230619224042592858','20230627200527563719','1111111111','2023-09-27 21:21:13',0,0,NULL,0);
+(95,'20230619224042592858','20230627200527563719','1111111111','2023-09-27 21:21:13',0,0,NULL,0),
+(96,'20230619224042592858','20230627200416867249','go了','2024-01-02 20:09:34',0,0,NULL,0),
+(97,'20230619224042592858','20230627200546097387','?','2024-01-08 20:17:21',0,0,NULL,0);
+
+/*Table structure for table `post` */
+
+DROP TABLE IF EXISTS `post`;
+
+CREATE TABLE `post` (
+  `id` varchar(20) NOT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `user_id` varchar(20) DEFAULT NULL,
+  `category_id` int DEFAULT NULL,
+  `view_count` int DEFAULT NULL,
+  `reply_count` int DEFAULT NULL,
+  `last_reply_user_id` int DEFAULT NULL,
+  `last_reply_time` datetime DEFAULT NULL,
+  `is_top` tinyint(1) DEFAULT '0',
+  `is_deleted` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `post` */
+
+insert  into `post`(`id`,`title`,`content`,`create_time`,`update_time`,`user_id`,`category_id`,`view_count`,`reply_count`,`last_reply_user_id`,`last_reply_time`,`is_top`,`is_deleted`) values 
+('20240214130003906659','测试标题','测试帖子','2024-02-14 05:00:03',NULL,'20230619224042592858',NULL,3,1,NULL,NULL,0,0),
+('20240214132200050896','新帖子','111111','2024-02-14 05:22:00',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240214132324651954','22','2222222','2024-02-14 05:23:24',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240214142517462966','长长长','123456789461616516516516fdsfsgfsagdgkdlgnlkdnglkdngljdngldjgndjksghjfdghignidnbdfjbndjkfgbnjkdbngjkdgbkdjsgbkdjgbdkjgbskdgbdskgjbdkjgbdskgjbdskgjsdkdgbdskgbdskgbdskgjdsbgksdgbdskgbdskgbkdsgbdskgkdsjgbkdsgsdk','2024-02-14 06:25:17',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240214155806875127','ces','测试','2024-02-14 07:58:06',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240217141812954075','1111111111','111111111111111','2024-02-17 06:18:12',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240217144411043264','22222','2222222222222222222222222222222222','2024-02-17 06:44:11',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240227202340966649','测试滚动','测试滚动','2024-02-27 12:23:40',NULL,'20230619224042592858',NULL,1,0,NULL,NULL,0,0),
+('20240227202347245453','测试滚动1','测试滚动1','2024-02-27 12:23:47',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240227202351257117','测试滚动12','测试滚动12','2024-02-27 12:23:51',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240227204831182092','测试触底刷新','测试触底刷新','2024-02-27 12:48:31',NULL,'20230619224042592858',NULL,0,0,NULL,NULL,0,0),
+('20240227204836050964','测试触底刷新11','测试触底刷新11','2024-02-27 12:48:36',NULL,'20230619224042592858',NULL,2,0,NULL,NULL,0,0);
+
+/*Table structure for table `reply` */
+
+DROP TABLE IF EXISTS `reply`;
+
+CREATE TABLE `reply` (
+  `id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `user_id` varchar(20) DEFAULT NULL,
+  `post_id` varchar(20) DEFAULT NULL,
+  `parent_reply_id` varchar(20) DEFAULT NULL,
+  `is_deleted` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `reply` */
+
+insert  into `reply`(`id`,`content`,`create_time`,`update_time`,`user_id`,`post_id`,`parent_reply_id`,`is_deleted`) values 
+('20230619224042592858','回复测试','2024-02-16 15:15:29',NULL,'20230619224042592858','20240214130003906659','20230627200416867249',0),
+('20230619224042592859','回复测试111','2024-02-17 13:11:51','2024-02-18 13:36:43','20230619224042592858','20240214130003906659',NULL,0),
+('20230619224042592860','父id','2024-02-16 13:44:18','2024-02-17 13:44:10','20230627200416867249','20240214130003906659',NULL,0),
+('20230619224042592861','11111','2024-02-17 14:17:38',NULL,'20230627200416867249','20240214130003906659',NULL,0),
+('20240229212930674253','dasfsfdada','2024-02-29 13:29:30',NULL,'20230619224042592858','20240214130003906659','20230619224042592861',0),
+('20240229213143956208','fasfsaf','2024-02-29 13:31:43',NULL,'20230619224042592858','20240214130003906659','20230619224042592858',0),
+('20240229214220152997','dad','2024-02-29 13:42:20',NULL,'20230619224042592858','20240214130003906659',NULL,0),
+('20240229214359112146','dda','2024-02-29 13:43:59',NULL,'20230619224042592858','20240214130003906659',NULL,0);
 
 /*Table structure for table `sequelizemeta` */
 
@@ -216,7 +330,11 @@ insert  into `sequelizemeta`(`name`) values
 ('20231009110103-init-sheet.js'),
 ('20231009110242-init-work-book.js'),
 ('20231009110302-init-sheet-data.js'),
-('20231024125920-init-workbook-member.js');
+('20231024125920-init-workbook-member.js'),
+('20240213030709-post.js'),
+('20240213030731-reply.js'),
+('20240221112442-init-email-code.js'),
+('20240305130817-email.js');
 
 /*Table structure for table `sheet` */
 
@@ -257,7 +375,7 @@ CREATE TABLE `sheet-data` (
 
 insert  into `sheet-data`(`id`,`sheet_Id`,`r`,`c`,`v`,`index`) values 
 (4339,20,0,0,'{\"m\": \"31312\", \"v\": 31312, \"ct\": {\"t\": \"n\", \"fa\": \"General\"}}','b7YeUdifKBJSwjcPjnAlmKBOWre71JgS'),
-(4340,20,1,0,'{\"m\": \"123\", \"v\": 123, \"ct\": {\"t\": \"n\", \"fa\": \"General\"}}','b7YeUdifKBJSwjcPjnAlmKBOWre71JgS'),
+(4340,20,1,0,'{\"m\": \"1234\", \"v\": 1234, \"ct\": {\"t\": \"n\", \"fa\": \"General\"}}','b7YeUdifKBJSwjcPjnAlmKBOWre71JgS'),
 (4661,54,4,1,'{\"v\": \"测试1\", \"qp\": 1, \"tb\": 1}','5c22mh4ELopVM3jb2cVPVJpUuA9TwmGe'),
 (4662,54,0,0,'{\"m\": \"1\", \"v\": 1, \"ct\": {\"t\": \"n\", \"fa\": \"General\"}, \"tb\": 1}','bj920k7OxEN5O1njis4hNMqm74BtcYTh'),
 (4663,54,1,1,'{\"m\": \"2\", \"v\": 2, \"ct\": {\"t\": \"n\", \"fa\": \"General\"}, \"tb\": 1}','bj920k7OxEN5O1njis4hNMqm74BtcYTh'),
@@ -279,20 +397,21 @@ CREATE TABLE `user` (
   `last_login_time` datetime DEFAULT NULL,
   `note` varchar(255) DEFAULT NULL,
   `status` int DEFAULT NULL,
+  `nickname` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user` */
 
-insert  into `user`(`id`,`uuid`,`user_name`,`user_email`,`user_type`,`avator_url`,`login_num`,`create_time`,`last_login_time`,`note`,`status`) values 
-(6,'20230619224042592858','1111','1275056222@qq.com',0,'src/assets/images/avatar.jpg',489,'2023-06-19 22:40:42','2023-12-28 12:35:44','ada',1),
-(7,'20230620202512869559','1111','1577268480@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-20 20:25:12',NULL,NULL,0),
-(8,'20230620203120108012','1111','157726880@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-20 20:31:20',NULL,NULL,1),
-(9,'20230627200416867249','11@qq.com','1@qq.com',0,'src/assets/images/avatar.jpg',7,'2023-06-27 20:04:16','2023-10-25 12:21:19',NULL,1),
-(10,'20230627200527563719','2','2@qq.com',0,'src/assets/images/avatar.jpg',6,'2023-06-27 20:05:27','2023-09-26 12:41:28','2号的自我介绍!!!!',1),
-(11,'20230627200546097387','3333333333333','3@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-27 20:05:46',NULL,'3号自我介绍',0),
-(12,'20230627200601394613','4444444','4@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-27 20:06:01',NULL,'4号自我介绍',0),
-(13,'20230627200616634772','555555','5@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-27 20:06:16',NULL,NULL,1);
+insert  into `user`(`id`,`uuid`,`user_name`,`user_email`,`user_type`,`avator_url`,`login_num`,`create_time`,`last_login_time`,`note`,`status`,`nickname`) values 
+(6,'20230619224042592858','管理者','deremal666@hdrlog.com',0,'src/assets/images/avatar.jpg',621,'2023-06-19 22:40:42','2024-03-14 11:49:54','自我~~~',0,'昵称啦~~~99'),
+(8,'20230620203120108012','1111','157726880@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-20 20:31:20',NULL,NULL,1,NULL),
+(9,'20230627200416867249','11@qq.com','1@qq.com',0,'src/assets/images/avatar.jpg',8,'2023-06-27 20:04:16','2024-03-14 11:52:08',NULL,1,NULL),
+(10,'20230627200527563719','2','2@qq.com',0,'src/assets/images/avatar.jpg',6,'2023-06-27 20:05:27','2023-09-26 12:41:28','2号的自我介绍!!!!',1,NULL),
+(11,'20230627200546097387','3333333333333','3@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-27 20:05:46',NULL,'3号自我介绍',0,NULL),
+(12,'20230627200601394613','4444444','4@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-27 20:06:01',NULL,'4号自我介绍',0,NULL),
+(13,'20230627200616634772','555555','5@qq.com',0,'src/assets/images/avatar.jpg',NULL,'2023-06-27 20:06:16',NULL,NULL,1,NULL),
+(20,'20240221204052993033','bimigas836@lendfash.com','bimigas836@lendfash.com',0,NULL,NULL,'2024-02-21 12:40:52',NULL,NULL,NULL,NULL);
 
 /*Table structure for table `user_login` */
 
@@ -309,8 +428,7 @@ CREATE TABLE `user_login` (
 /*Data for the table `user_login` */
 
 insert  into `user_login`(`uuid`,`user_password`,`user_email`,`salt`) values 
-('20230619224042592858','$2a$10$TG1Bx3DyTWN71nNGvWKKoOgCEM9jgsyGIvZ/b8Y0f5LoQnSIDTeha','1275056222@qq.com','$2a$10$TG1Bx3DyTWN71nNGvWKKoO'),
-('20230620202512869559','$2a$10$168S91m2eSmxhNelGvcxq.7R0ffDyDt5qIdrvPb5v4HeeimTQFBEG','1577268480@qq.com','$2a$10$168S91m2eSmxhNelGvcxq.'),
+('20230619224042592858','$2a$10$TG1Bx3DyTWN71nNGvWKKoOgCEM9jgsyGIvZ/b8Y0f5LoQnSIDTeha','deremal666@hdrlog.com','$2a$10$TG1Bx3DyTWN71nNGvWKKoO'),
 ('20230620203120108012','$2a$10$2H5degKas5Oy98xj6BfJeuY8aldzPBgU3Tqfnyj5gSD6rlA6YHUOu','157726880@qq.com','$2a$10$2H5degKas5Oy98xj6BfJeu'),
 ('20230627200416867249','$2a$10$KDnM4jXIrgzPJklt43H2v.XOalUX7Ab4mOTYY/whIm58ki2cTFfgi','1@qq.com','$2a$10$KDnM4jXIrgzPJklt43H2v.'),
 ('20230627200527563719','$2a$10$lbXYlmP51wrQNS2i0I0VTOwuQx2r7Gb9WjRFhMouQgQrA4BKsX4/u','2@qq.com','$2a$10$lbXYlmP51wrQNS2i0I0VTO'),

@@ -77,7 +77,17 @@ onMounted(()=>{
               <el-col :span="12">
                 <el-icon ><UserFilled /></el-icon>
                 <span class="category">好友</span>
-                <i class="msg-num">3</i>
+                <!-- <i class="msg-num">3</i> -->
+              </el-col>
+            </el-row>
+
+            <el-row
+              :class="['friends-top-flex',$route.path === '/main/store' ? 'is-active' : '']"
+              @click="router.push('/forum')"
+            >
+              <el-col :span="12">
+                <el-icon><ChatLineSquare /></el-icon>
+                <span class="post">在线论坛</span>
               </el-col>
             </el-row>
 
@@ -90,6 +100,7 @@ onMounted(()=>{
                 <span class="category">在线文档</span>
               </el-col>
             </el-row>
+
           </el-container>
 
           <!-- 私信 -->

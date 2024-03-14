@@ -1,6 +1,7 @@
 <script setup lang='ts'>
-import {reactive , onMounted} from "vue"
+import {reactive , onMounted, ref} from "vue"
 import friendDisplay from "./friendDisplay.vue";
+import emailBox from "./emailBox.vue";
 
 import axios from "@/axios";
 import type { Friend } from '@/stores/interface/friendsList'
@@ -9,7 +10,6 @@ const state = reactive({
   statu_index:2,
   friend_list:[] as Friend[], /* 保存axios接受原始数组 */
   display_list:[] as Friend[], /* 状态数组 */
-  email_box:false,
 })
 const method = reactive({
  check_statu(index:number) {
@@ -40,6 +40,12 @@ const method = reactive({
 onMounted(()=>{
   method.init_friendlist()
 })
+
+
+/** 
+ * @description 邮箱状态 
+*/
+const email_box = ref(false);
 </script>
 
 <template>
@@ -84,7 +90,7 @@ onMounted(()=>{
               content="收信箱"
               placement="bottom"
             >
-              <el-icon :size="24" color="rgb(181, 186, 193)" @click="state.email_box = !state.email_box"><Message /></el-icon>
+              <el-icon :size="24" color="rgb(181, 186, 193)" @click="email_box = !email_box"><Message /></el-icon>
             </el-tooltip>
             
             <el-tooltip
@@ -100,7 +106,7 @@ onMounted(()=>{
         </el-col>
       </el-row>
 
-      <div class="email-box" v-if="state.email_box">
+      <!-- <div class="email-box" v-if="state.email_box">
         <div class="email-box-header">
           <el-icon :size="24" color="rgb(181, 186, 193)"><Message /></el-icon>
           <h1>收件箱</h1>
@@ -108,7 +114,8 @@ onMounted(()=>{
         <div class="email-box-contain">
             <el-empty description="你已搞定一切" :image-size="100" />
         </div>
-      </div>
+      </div> -->
+      <emailBox :email_box="email_box" v-if="email_box"/>
     </el-header>
     <!-- 朋友列表信息 -->
     <el-row class="box-main-mid-right">
@@ -270,37 +277,7 @@ onMounted(()=>{
 }
 
 
-/* 收件箱 */
-.email-box{
-  width: 35vw;
-  max-width: 600px;
-  min-width: 480px;
-  max-height: 80vh;
-  position: absolute;
-  top: 50px;
-  right: 100px;
-  z-index: 30;
-}
-.email-box-header{
-  display: flex;
-  align-items: center;
-  background-color: #1E1F22;
-  border-radius: 10px 10px 0 0;
-  h1{
-    margin-left: 8px;
-    color: #DBDEE1;
-    font-size: 20px;
-    line-height: 24px;
-    font-weight: 600;
-    flex-grow: 1;
-  }
-}
-.email-box-contain{
-  min-width: 480px;
-  height: 400px;
-  border-radius: 0 0 10px 10px;
-  background-color: #303133;
-}
+
 
 
 

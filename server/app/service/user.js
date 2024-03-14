@@ -32,11 +32,14 @@ class UserService extends Service {
       // 更新登录数据
       await ctx.model.User.update({ login_num: user.dataValues.login_num + 1, last_login_time: moment(), status: 1 }, { where: { uuid: user.dataValues.uuid } });
       // await ctx.model.UserLogin.update({ status: 1 }, { where: { uuid: user.dataValues.uuid } });
-      // 生成token
+      // 短期token
       const token = app.jwt.sign({
         uuid: user.dataValues.uuid, // 需要存储的 token 数据
-      }, app.config.jwt.secret, { expiresIn: '24h' }); // token过期
-
+      }, app.config.jwt.secret, { expiresIn: '2h' }); // token过期
+      // 长期token
+      const refreshToken = app.jwt.sign({
+        uuid: user.dataValues.uuid,
+      }, app.config.jwt.secret, { expiresIn: '15d' });
       // 存储session参数
       ctx.session.uuid = user.dataValues.uuid;
       ctx.session.user_email = user_email;
@@ -54,7 +57,7 @@ class UserService extends Service {
         status: user.status,
         nickname: user.nickname,
       };
-      return ctx.success('登录成功!', { result, token });
+      return ctx.success('登录成功!', { result, token, refreshToken });
     }
     return ctx.fail('用户名或密码错误!');
   }
@@ -215,11 +218,9 @@ class UserService extends Service {
     const { ctx } = this;
     const token = ctx.request.header.token;
     const uuid = ctx.helper.uuidGet(token);
-    const user = await ctx.model.User.findOne({ where: { uuid } });
+    const user = await ctx.model.User.update({ status: 0 }, { where: { uuid } });
+
     if (user) {
-      // 清空登录session信息
-      ctx.session.uuid = null;
-      ctx.session.user_email = null;
       return ctx.success('登出成功！');
     }
     return ctx.fail('登出失败！');
@@ -300,6 +301,42 @@ class UserService extends Service {
         await ctx.model.EmailCode.create(params);
         return ctx.success({ mag: '验证码发送成功' });
       }
+    } catch (error) {
+      return ctx.fail(`${error}`);
+    }
+  }
+
+  /* 密码修改 */
+  async changePassword(oldPassword, newPassword, confirmPassword) {
+    const { ctx } = this;
+    const uuid = ctx.helper.uuidGet();
+    if (newPassword !== confirmPassword) return ctx.warn('两次密码不一致');
+    try {
+      /* 获得盐值 */
+      const res = await ctx.model.UserLogin.findOne({
+        where: {
+          uuid,
+        },
+      });
+      const salt = res.dataValues.salt;
+      const sqlPassword = res.dataValues.user_password;
+      /* 旧密码加盐 */
+      oldPassword = bcrypt.hashSync(oldPassword, salt);
+      /* 新密码加盐 */
+      newPassword = bcrypt.hashSync(newPassword, salt);
+      if (oldPassword === sqlPassword) {
+        const successChange = await ctx.model.UserLogin.update({ user_password: newPassword }, {
+          where: {
+            uuid,
+            user_password: oldPassword,
+            salt,
+          },
+        });
+        if (successChange) {
+          return ctx.success('密码修改成功');
+        }
+      }
+      return ctx.warn('旧密码错误');
     } catch (error) {
       return ctx.fail(`${error}`);
     }

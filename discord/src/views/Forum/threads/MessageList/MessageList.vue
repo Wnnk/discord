@@ -4,7 +4,7 @@ import type { ReplyListProp } from '@/views/Forum/interface'
 const { reply } = defineProps<{
   reply:ReplyListProp
 }>()
-console.log(reply)
+
 </script>
 
 <template>

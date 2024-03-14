@@ -42,14 +42,20 @@ class PostService extends Service {
     };
     try {
       const res = await ctx.model.Reply.create(form);
-      return ctx.success('回复成功!', { statu: 200, result: res });
+      /* 添加留言量 */
+      const addReplyCount = await ctx.model.Post.increment('reply_count', {
+        where: { id: data.post_id },
+      });
+      if (res && addReplyCount) {
+        return ctx.success('回复成功!', { statu: 200, result: res });
+      }
     } catch (error) {
       ctx.logger.error(error);
       return ctx.fail(error);
     }
   }
 
-  async getPostList() {
+  async getPostList(limit) {
     const { Sequelize } = require('sequelize');
     const { ctx } = this;
     try {
@@ -75,8 +81,11 @@ class PostService extends Service {
           'is_deleted',
           'last_reply_time',
         ],
+        limit,
+        order: [[ 'create_time', 'DESC' ]],
       });
       return ctx.success('获取成功!', { statu: 200, result: postHead });
+
     } catch (error) {
       ctx.logger.error(error);
       return ctx.fail(error);
@@ -140,6 +149,7 @@ class PostService extends Service {
           [ Sequelize.col('parentReply.user_name'), 'parent_name' ],
         ],
         raw: true,
+        order: [[ 'create_time', 'ASC' ]],
       });
       return ctx.success('获取成功!', { statu: 200, result: { postHead, postDetail } });
     } catch (error) {
@@ -147,6 +157,20 @@ class PostService extends Service {
       return ctx.fail(error);
     }
 
+  }
+
+  async updateViewAndMessageCount(List, limit) {
+    const { ctx } = this;
+    try {
+      await ctx.model.Post.bulkCreate(List, {
+        updateOnDuplicate: [ 'view_count', 'reply_count' ],
+      });
+      const updatePostList = await this.getPostList(limit);
+      const res = JSON.parse(updatePostList);
+      return res;
+    } catch (error) {
+      return ctx.fail(error);
+    }
   }
 }
 module.exports = PostService;

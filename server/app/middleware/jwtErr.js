@@ -1,12 +1,14 @@
 module.exports = options => {
   return async function jwtErr(ctx, next) {
-    const token = ctx.request.header.token;
+    const token = ctx.request.headers.token;
     if (token) {
       try {
         // 解码token
         const decode = ctx.app.jwt.verify(token, options.secret);
-        console.log('解码后', decode);
-        await next();
+        if (decode) {
+          console.log('执行next');
+          await next();
+        }
       } catch (error) {
         ctx.status = 401;
         ctx.body = {

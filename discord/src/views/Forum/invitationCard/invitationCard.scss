@@ -44,7 +44,7 @@
   padding-right: 24px;
   flex:1;
   align-items: stretch;
-  overflow-y: auto;
+  overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 5px;
   }
@@ -133,12 +133,13 @@
     padding: 0 4px;
   }
   .message-count,
-  .dianzan-count{
+  .liulanliang-count{
     color: $text-post-normal;
     font-size: 14px;
     font-weight: 500;
   }
 }
+
 
 
 .post-slide-enter-active,

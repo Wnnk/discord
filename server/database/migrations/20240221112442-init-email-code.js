@@ -13,6 +13,6 @@ module.exports = {
     });
   },
   down: async queryInterface => {
-    await queryInterface.dropTable('post');
+    await queryInterface.dropTable('email-code');
   },
 };

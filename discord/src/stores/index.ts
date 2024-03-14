@@ -5,7 +5,8 @@ import type { Friend } from './interface/friendsList'
 export const globalStore = defineStore('globalStore', {
   state:()=>{
     return{
-      token:"",
+      token:localStorage.getItem('token'),
+      refreshToken:localStorage.getItem('refreshToken'),
       user_info:{
         user_name:"",
         avator_url:new URL("",import.meta.url).href,
@@ -27,7 +28,7 @@ export const globalStore = defineStore('globalStore', {
   getters:{},
   actions:{},
   persist: {
-    storage: sessionStorage,
+    storage: localStorage,
     paths:['user_info','threadsWidth']
   }
 })

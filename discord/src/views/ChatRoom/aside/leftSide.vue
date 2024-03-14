@@ -89,8 +89,8 @@ const route = useRoute()
       if(state.formData.get('server_name') !== '' && selectedFile !== null) {
         http.post('http://127.0.0.1:7001/guild/create',state.formData,{
           headers: {
-            authorization: sessionStorage.getItem('token'),
-            token:sessionStorage.getItem('token'),
+            authorization: localStorage.getItem('token'),
+            token:localStorage.getItem('token'),
             'Content-Type': 'multipart/form-data',
           }
         }).then(()=>{

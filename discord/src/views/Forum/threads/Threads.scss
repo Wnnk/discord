@@ -55,8 +55,13 @@
 
 
 .thread-list{
-
+  padding-bottom: 100px;
   overflow-y: auto;
   min-height: 0;
   min-width: 0;
+  .thread-item{
+    :hover{
+      background-color: #393c41;
+    }
+  }
 }

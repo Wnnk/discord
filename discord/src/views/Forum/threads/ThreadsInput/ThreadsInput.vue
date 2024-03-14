@@ -1,30 +1,35 @@
 <script setup lang='ts'>
-import { ref }  from 'vue';
+import { ref, watch,defineModel }  from 'vue';
 import axios from '@/axios';
-const threadInput = ref('')
+import type { ReplyThreadProp }from '../../interface'
+const { replyForm } = defineProps<{
+  replyForm: ReplyThreadProp,
+}>()
 
-/** 
- * @description 发送帖子
- * @param {string} content 帖子内容
- * 
- */
-//  const sendThreads = async (content:string) => {
-//   // 回复帖子
-//   const parent_reply_arr:string[] = [];
-//   // 发送信息
-//   const newThreadMessage = await axios('',{
-//     data: {
-//       parent_reply_arr,
-//       content
-//     }
-//   })
-// }
-
+const emits = defineEmits<{
+  (e: 'update:replyForm', value: ReplyThreadProp): void,
+}>()
+const colseReply = () => {
+  replyForm.isReply = false;
+  emits('update:replyForm',replyForm)
+} 
+const subReplyForm = () => {
+  emits('update:replyForm', replyForm)
+}
 
 </script>
 
 <template>
   <form class="form">
+    <div class="reply-bar" v-show="replyForm.isReply">
+      <div class="reply-label">
+        正在回复至
+        <span class="reply-user">{{replyForm.parent_name}}</span>
+      </div>
+      <div class="close-reply" @click="colseReply">
+        <i class="close iconfont  icon-htmal5icon19 "></i>
+      </div>
+    </div>
     <div class="channel-text-area">
       <div class="scroolable-container">
         <div class="inner">
@@ -43,7 +48,7 @@ const threadInput = ref('')
             </button>
           </div>
           <div class="text-Area">
-            <el-input class="slate-text-area" placeholder="在XX标题中发送一则消息" v-model="threadInput" ></el-input>
+            <el-input class="slate-text-area" placeholder="在XX标题中发送一则消息" v-model="replyForm.content" @keyup.enter="subReplyForm"></el-input>
           </div>
           <div class="buttons-icon" >
             <button aria-haspopup="dialog" class="button-type">

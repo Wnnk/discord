@@ -23,7 +23,7 @@
   background-color: $bg-scroll;
   overflow-x: hidden;
   max-height: 50vh;
-  border-radius: 8px;
+  border-radius: 0px 0px 8px 8px;
   backface-visibility: hidden;
   scrollbar-width: none;
 }
@@ -151,6 +151,39 @@
           }
         }
       }
+    }
+  }
+
+  .reply-bar{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    cursor: pointer;
+    background-color: rgb(43, 45, 49);
+    .reply-label{
+      color: rgb(181, 186, 193);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-left: 16px;
+      font-size: 14px;
+      font-weight: 400;
+      .reply-user{
+        font-weight: 600;
+      }
+    }
+    .close-reply{
+      min-height: 16px;
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      cursor: pointer;
+      color: rgb(181, 186, 193);
+      line-height: 0;
+      padding: 8px 18px 8px 16px;
+
     }
   }
 

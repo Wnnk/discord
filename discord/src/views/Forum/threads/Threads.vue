@@ -7,13 +7,19 @@ import axios from '@/axios'
 import { globalStore } from '@/stores/index'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import type{ ThreadHeadPorp , ReplyListProp} from '@/views/Forum/interface'
+import type{ ThreadHeadPorp , ReplyListProp, ReplyThreadProp} from '@/views/Forum/interface'
 import { handlerTimer } from '@/utils/handlerTime'
 
 
 const threadsWidth = ref(globalStore().threadsWidth);
 const thread = ref<null | HTMLElement >(null) 
 const dragging = ref(false);
+
+/* postId, 全局使用 */
+  const route = useRoute();
+  const path = route.path.split('/');
+  const id = path[path.length - 1];
+  console.log(id)
 
 /**
  * @description 监听鼠标位置，动态改变鼠标指针样式 
@@ -87,10 +93,10 @@ const replyList = ref<ReplyListProp[] | null>([]);
 
 
 const initThreads = async () => {
-  /* 获取帖子id */
-  const route = useRoute();
-  const path = route.path.split('/');
-  const id = path[path.length - 1];
+  // /* 获取帖子id */
+  // const route = useRoute();
+  // const path = route.path.split('/');
+  // const id = path[path.length - 1];
   /* 发起请求 */
   const threads = await axios('/thread',{
     data:{
@@ -112,14 +118,12 @@ const initThreads = async () => {
         })
         if (matchItem) {
           item.parent_content = matchItem.content;
-          console.log(item)
         }
       }
     });
     
     threadHead.value = data.postHead;
     replyList.value = data.postDetail;
-    console.log(replyList.value);
     return
   }
   ElMessage({
@@ -128,6 +132,53 @@ const initThreads = async () => {
   })
   
 }
+
+
+/** 
+ * @description 回复具体一个用户评论
+ * 
+*/
+const replyForm = ref<ReplyThreadProp>({
+  isReply:false,
+  post_id:id,
+  parent_reply_id:'',
+  parent_name:'',
+  content:'',
+})
+
+
+const replyContent = async (parent_reply_id:string, parent_name:string) => {
+  /* 回复指定用户 */
+  replyForm.value.parent_reply_id = parent_reply_id;
+  replyForm.value.parent_name = parent_name;
+  replyForm.value.isReply = true;
+}
+
+const updateForm = async (newForm: ReplyThreadProp) => {
+  replyForm.value = newForm;
+  const createReply = await axios('/reply',{
+    data:replyForm.value
+  })
+  const data = createReply.data.data;
+  if (data.statu === 200) {
+    replyForm.value.content='';
+    initThreads();
+  }
+
+}
+
+
+/**
+ * @description 回复帖子
+ * 
+*/
+
+const replyPost =  (postId:string) => {
+  
+}
+
+
+
 
 onMounted(() => {
   initThreads();
@@ -150,10 +201,13 @@ onMounted(() => {
     <div class="divider"></div>
     <div class="thread-list">
       <div class="thread-item" v-for="item of replyList" :key="item.id">
-        <MessageList :reply="item"/>
+        <MessageList :reply="item" @click="replyContent(item.id,item.user_name)"/>
       </div>
     </div>
-    <ThreadsInput />
+    <div>
+      <ThreadsInput v-model:replyForm="replyForm"  @update:replyForm="updateForm"/>
+    </div>
+    
   </div>
 
 
