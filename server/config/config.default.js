@@ -84,7 +84,7 @@ module.exports = appInfo => {
       enable: false,
       ignoreJSON: true,
     },
-    domainWhiteList: [ 'http://localhost:5173' ],
+    domainWhiteList: [ 'http://localhost:5173', 'http://47.113.190.38' ],
   };
   config.cors = {
     origin: 'http://localhost:5173', /* 一定要是域名端口 */

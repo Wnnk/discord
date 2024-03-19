@@ -4,8 +4,9 @@ const { Service } = require('egg');
 class GuildService extends Service {
   /* 创建社区 */
   async createGuild(server_name, filename) {
-    const { ctx } = this;
-    const path = `http://127.0.0.1:7001/guild/${filename}`;
+    const { ctx, app } = this;
+
+    const path = `${app.config.baseUrl}/guild/${filename}`;
     const user_uuid = ctx.helper.uuidGet();
     const flag = await ctx.model.Group.create({
       group_name: server_name,

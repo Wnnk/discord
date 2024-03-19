@@ -20,24 +20,12 @@ class MessageService extends Service {
   }
 
   async createmessagePicture() {
-    /* const { ctx } = this;
-    const user_uuid = ctx.helper.uuidGet();
-    const filePath = `http://127.0.0.1:7001/${ctx.customParam.filename}`;
-    try {
-      await ctx.model.Message.create({
-        sender_uuid: user_uuid,
-        receiver_uuid: ctx.customParam.friend_uuid,
-        contain: filePath,
-        message_type: 1,
-      });
-    } catch (error) {
-      return ctx.fail(error);
-    } */
 
-    const { ctx } = this;
+
+    const { ctx, app } = this;
     const data = ctx.request.body;
     const user_uuid = ctx.helper.uuidGet();
-    const filePath = `http://127.0.0.1:7001/upload/${data.filename}`;
+    const filePath = `${app.config.baseUrl}/upload/${data.filename}`;
     const flag = await ctx.model.Message.create({
       sender_uuid: user_uuid,
       receiver_uuid: data.friend_uuid,

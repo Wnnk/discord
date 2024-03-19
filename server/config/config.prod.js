@@ -8,6 +8,7 @@ module.exports = () => {
     outputJSON: true, // json格式输出
   };
 
+  config.baseUrl = 'http://47.113.190.38:7001';
   // 数据库配置
   config.mysql = {
     // 单数据库信息配置
@@ -21,7 +22,7 @@ module.exports = () => {
       // 密码
       password: 'Am1275056222*',
       // 数据库名
-      database: 'EggZoneFrame',
+      database: 'eggzoneframe',
     },
     // 是否加载到 app 上，默认开启
     app: true,
@@ -41,7 +42,7 @@ module.exports = () => {
     // 密码
     password: 'Am1275056222*',
     // 数据库名
-    database: 'EggZoneFrame',
+    database: 'eggzoneframe',
     // 时区，sequelize有很多自动时间的方法，都是和时区相关的，记得设置成东8区（+08:00）
     // timezone: '+08:00',
     define: {

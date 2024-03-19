@@ -12,7 +12,7 @@ MySQL - 8.0.33 : Database - eggzoneframe
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`eggzoneframe` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`eggzoneframe` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci*/ /*!80016 DEFAULT ENCRYPTION='N' */;
 
 USE `eggzoneframe`;
 
@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `email`;
 
 CREATE TABLE `email` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `receiver_uuid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `receiver_uuid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `sender_uuid` varchar(32) DEFAULT NULL,
   `status` int DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `email` (
   `type` int DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `email` */
 
@@ -52,7 +52,7 @@ CREATE TABLE `email-code` (
   `expiration_time` datetime DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `email-code` */
 
@@ -69,7 +69,7 @@ CREATE TABLE `friend` (
   `friend_uuid` varchar(255) DEFAULT NULL,
   `relationship` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `friend` */
 
@@ -89,12 +89,12 @@ DROP TABLE IF EXISTS `group`;
 CREATE TABLE `group` (
   `id` int NOT NULL AUTO_INCREMENT,
   `group_name` varchar(255) DEFAULT NULL,
-  `group_owner` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `group_owner` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `create_time` datetime NOT NULL,
   `iconpath` varchar(255) NOT NULL,
-  `default_channel` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `default_channel` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `group` */
 
@@ -113,11 +113,11 @@ DROP TABLE IF EXISTS `group-channel`;
 CREATE TABLE `group-channel` (
   `id` int NOT NULL AUTO_INCREMENT,
   `group_id` int NOT NULL,
-  `channel_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `channel_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `parvate_channel` int NOT NULL,
-  `channel_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `channel_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `group-channel` */
 
@@ -142,7 +142,7 @@ CREATE TABLE `group-chat` (
   `channel_id` varchar(255) DEFAULT NULL,
   `message_type` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `group-chat` */
 
@@ -188,7 +188,7 @@ CREATE TABLE `group-member` (
   `member_id` varchar(36) DEFAULT NULL,
   `type` int DEFAULT NULL COMMENT '成员权限',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `group-member` */
 
@@ -216,7 +216,7 @@ CREATE TABLE `message` (
   `attachment` varchar(255) DEFAULT NULL,
   `message_type` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `message` */
 
@@ -260,7 +260,7 @@ CREATE TABLE `post` (
   `is_top` tinyint(1) DEFAULT '0',
   `is_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `post` */
 
@@ -283,7 +283,7 @@ insert  into `post`(`id`,`title`,`content`,`create_time`,`update_time`,`user_id`
 DROP TABLE IF EXISTS `reply`;
 
 CREATE TABLE `reply` (
-  `id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `content` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
@@ -292,7 +292,7 @@ CREATE TABLE `reply` (
   `parent_reply_id` varchar(20) DEFAULT NULL,
   `is_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `reply` */
 
@@ -347,7 +347,7 @@ CREATE TABLE `sheet` (
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `sheet` */
 
@@ -367,9 +367,9 @@ CREATE TABLE `sheet-data` (
   `r` int NOT NULL,
   `c` int NOT NULL,
   `v` json DEFAULT NULL,
-  `index` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `index` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4665 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4665 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `sheet-data` */
 
@@ -387,9 +387,9 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `uuid` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `user_name` varchar(255) DEFAULT NULL,
-  `user_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `user_email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `user_type` int DEFAULT NULL,
   `avator_url` varchar(255) DEFAULT NULL,
   `login_num` int DEFAULT NULL,
@@ -399,7 +399,7 @@ CREATE TABLE `user` (
   `status` int DEFAULT NULL,
   `nickname` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `user` */
 
@@ -420,10 +420,10 @@ DROP TABLE IF EXISTS `user_login`;
 CREATE TABLE `user_login` (
   `uuid` varchar(36) NOT NULL,
   `user_password` varchar(255) DEFAULT NULL,
-  `user_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `user_email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `salt` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `user_login` */
 
@@ -448,7 +448,7 @@ CREATE TABLE `work-book` (
   `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `work-book` */
 
@@ -465,7 +465,7 @@ CREATE TABLE `workbook-member` (
   `workbook_id` int NOT NULL,
   `uuid` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Data for the table `workbook-member` */
 

@@ -4,20 +4,23 @@
     "password": "Am1275056222",
     "database": "database_development",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "baseUrl": "http://127.0.0.1:7001"
   },
   "test": {
     "username": "root",
     "password": "1275056222",
     "database": "database_test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "baseUrl": "http://127.0.0.1:7001"
   },
   "production": {
     "username": "root",
     "password": "1275056222",
     "database": "database_production",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "baseUrl": "http://47.113.190.38:7001"
   }
 }

@@ -16,11 +16,12 @@ const store = globalStore()
 const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFile = ref<File | null>(null)
 const socket = ref<Socket | null>(null)
-
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL
+  console.log(baseUrl);
 const init =  () => {
   state.uuid = route.currentRoute.value.params.id as string   //传入的不会是数组
   method.init_information()
-  socket.value = io('http://127.0.0.1:7001/chat',{
+  socket.value = io(`${baseUrl}/chat`,{
     transports: ['polling'],
   })
   socket.value.on('connect', () => {
@@ -114,7 +115,7 @@ const method = reactive({
       message_type: 1,
     }
     formData.append('uuid',otherData.uuid)
-    http.post('http://127.0.0.1:7001/message/upload',formData,{
+    http.post( `${baseUrl}/message/upload`,formData,{
       headers: {
         authorization: localStorage.getItem('token'),
         token:localStorage.getItem('token'),

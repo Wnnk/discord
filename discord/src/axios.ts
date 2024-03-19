@@ -1,7 +1,9 @@
 import axios from 'axios'
 import router from '@/routers'
 
+let baseURL = import.meta.env.VITE_APP_BASE_URL;
 
+// console.log(baseURL)
 
 export default function (url:string, {
   // 默认求情方式post
@@ -23,7 +25,7 @@ export default function (url:string, {
     method: method,
     timeout: timeout,
     url: url,
-    baseURL: 'http://127.0.0.1:7001',
+    baseURL: baseURL,
     data: data,
     headers: headers,
     dataType: dataType,

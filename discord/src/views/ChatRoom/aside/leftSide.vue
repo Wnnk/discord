@@ -8,7 +8,7 @@ import axios from "@/axios";
 import {useRoute } from 'vue-router'
 
 const route = useRoute()
-
+const baseUrl =  import.meta.env.VITE_APP_BASE_URL
   /* 服务器icon */
   const fileInput = ref<HTMLInputElement | null>(null)  //上传按钮
   const selectedFile = ref<File | null>(null) //上传的图片
@@ -87,7 +87,7 @@ const route = useRoute()
       }
       state.formData.append('server_name',otherData.server_name)
       if(state.formData.get('server_name') !== '' && selectedFile !== null) {
-        http.post('http://127.0.0.1:7001/guild/create',state.formData,{
+        http.post(`${baseUrl}/guild/create`,state.formData,{
           headers: {
             authorization: localStorage.getItem('token'),
             token:localStorage.getItem('token'),

@@ -1,6 +1,6 @@
 'use strict';
 
-const sheet = require('../model/sheet');
+// const sheet = require('../model/sheet');
 
 const Service = require('egg').Service;
 
@@ -30,13 +30,13 @@ class SheetService extends Service {
   }
 
   async createSheet() {
-    const { ctx } = this;
+    const { ctx, app } = this;
     /* 工作簿配置 */
     const option = {
       container: 'luckysheet', // 容器
       title: 'Demo', // 工作簿名称
       myFolderUrl: '/#/luckysheet', // 回退地址
-      loadUrl: 'http://127.0.0.1:7001/loadUrl',
+      loadUrl: `${app.config.baseUrl}/loadUrl`,
       lang: 'zh', // 语言
       allowUpdate: false, // 允许更新
       // updateUrl: 'ws://127.0.0.1:7001/websocket', // 更新地址
@@ -270,13 +270,13 @@ class SheetService extends Service {
   }
 
   async improtFile() {
-    const { ctx } = this;
+    const { ctx, app } = this;
     /* 工作簿配置 */
     const option = {
       container: 'luckysheet', // 容器
       title: 'Demo', // 工作簿名称
       myFolderUrl: '/#/luckysheet', // 回退地址
-      loadUrl: 'http://127.0.0.1:7001/loadUrl',
+      loadUrl: `${app.config.baseUrl}/loadUrl`,
       lang: 'zh', // 语言
       allowUpdate: false, // 允许更新
       row: 18, // 行数

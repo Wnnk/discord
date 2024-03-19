@@ -66,9 +66,9 @@ class GuildChatService extends Service {
 
   /* 发送图片接口 */
   async Picture(data) {
-    const { ctx } = this;
+    const { ctx, app } = this;
     const sender_id = ctx.helper.uuidGet();
-    const filePath = `http://127.0.0.1:7001/guildChat/${data.filename}`;
+    const filePath = `${app.config.baseUrl}/guildChat/${data.filename}`;
     const result = await ctx.model.GroupChat.create({
       sender_id,
       message: filePath,

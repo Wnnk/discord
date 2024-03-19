@@ -8,6 +8,8 @@ module.exports = () => {
     outputJSON: true, // json格式输出
   };
 
+  config.baseUrl = 'http://127.0.0.1:7001';
+
   // 数据库配置
   config.mysql = {
     // 单数据库信息配置

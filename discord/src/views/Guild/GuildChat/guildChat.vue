@@ -9,6 +9,7 @@ import type { Socket } from 'socket.io-client';
 
 import Emoji from '@/common/emoji/emoji.vue'
 
+const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
 const route = useRoute()
 
 const socket = ref<Socket | null>(null)
@@ -25,8 +26,9 @@ const init = ()=>{
   method.member_status(parseInt(group_id)) // 右侧栏社区成员
   method.channel_title(channel_id) // 频道信息
 
+ 
   /* socket 连接 */
-  socket.value = io('ws://127.0.0.1:7001/guildChat',{
+  socket.value = io( `${baseUrl}/guildChat`,{ 
     
   })
   socket.value.on('connect',()=>{
@@ -239,7 +241,7 @@ const emojiHandle = (item:string) => {
                     </el-tooltip>
                     <el-upload
                       class="uploader"
-                      action=" http://127.0.0.1:7001/guild/picture"
+                      :action=" `${baseUrl}/guild/picture`" 
                       :headers="state.author"
                       :on-success="init"
                       :data="state.base_data"

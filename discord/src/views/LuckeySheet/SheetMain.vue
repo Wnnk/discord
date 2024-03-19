@@ -8,6 +8,7 @@ import ExcelJs from 'exceljs'
 
 
 
+const baseUrl = import.meta.env.VITE_APP_BASE_URL
 
 const route = useRoute();
 /* 当前的工作簿id */
@@ -34,7 +35,7 @@ const init = async ()=> {
   option.data = sheets.data
 
   /* socket连接 */
-  socket.value = io('http://127.0.0.1:7001/excel',{
+  socket.value = io(`${baseUrl}/excel`,{ 
     query:{},
   })
   socket.value.on('connect',()=>{
